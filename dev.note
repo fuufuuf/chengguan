@@ -1,0 +1,109 @@
+
+00 初始状态
+01 延期
+02 挂账
+03 回退
+04 正常完成
+
+11 延期成功
+12 挂账成功
+
+21 延期失败
+22 挂账失败
+
+
+{ TaskNum: '1224424505',
+  FindTime: '2012-04-26 15:08:25',
+  EventSource: '监督员上报',
+  EventType: '事件',
+  MainType: '宣传广告',
+  SubType: '广告招牌破损',
+  DistrictCode: '区编码',
+  DistrictName: '区',
+  StreetCode: '街道编码',
+  StreetName: '街道',
+  CommunityCode: '社区编码',
+  CommunityName: '社区',
+  CoordinateX: '2001',
+  CoordinateY: '2002',
+  EventAddress: '距离都市华城西南方向17米',
+  EventDescription: '任港路路南都市华城小区大门向里5米路东侧有…',
+  EventPositionMap: 'http://32.142.15.6/…/Event120077734/PosMap.gif',
+  SendTime: '2012-04-26 15:20:44',
+  DealEndTime: '2012-05-26 15:20:44',
+  SendMemo: '该问题请城管局根据情况处理',
+  DealTimeLimit: '256.00',
+  DealUnit: '50',
+  EventPictures: { num: '2', picture: [ [Object], [Object] ] },
+  EventMedias:
+   { num: '1',
+     media:
+      { name: '1003027204.wav',
+        url: 'http://32.142.15.6/…/1_1_1003027204.wav ' } } }
+
+
+TaskMaterilas表里面
+0是EventPictures
+1是EventMedias
+
+测试图片
+http://ac-la83xay2.clouddn.com/4809d838894d9d76.png
+http://ac-la83xay2.clouddn.com/4bbd57d98d57c775.png
+
+
+http://ac-la83xay2.clouddn.com/002d9bacb038789f.png
+
+
+http://localhost:3000/cg_imgs/m1.jpg
+http://localhost:3000/cg_imgs/m2.jpg
+http://localhost:3000/cg_imgs/map.jpg
+http://localhost:3000/cg_imgs/map2.jpg
+
+
+
+推送
+/CG_PUSH
+type
+
+0图文 -
+
+1巡检任务 - 任务名， 时间，不需要界面
+
+2养护任务 - 任务名， 时间，不需要界面
+
+3维修任务 - 任务名， 时间，不需要界面
+
+4预警消息 - 结合预警预接受界面生成， 内容一般为桥梁名，监测点名，超限时间， 超限值， 恢复时间， 红黄预警高底限， 单位（厘米、毫米）
+
+5报告 - 标题， 内容，上传附件
+
+status -
+0 微推送
+1 已推送
+
+
+推送url
+图文编辑器
+/editor?type=0
+报告编辑器
+/editor?type=5
+预警编辑器
+/warning_info
+/任务编辑器
+/taskeditor
+
+巡检任务包含：a 任务名称，b任务开始时间，c任务结束时间，d 巡检桥梁 e 巡检类型 f 任务描述
+
+维修任务包括：a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
+
+养护任务需要的任务内容同维修任务
+
+{"task_name":"巡检任务2","start_time":"2016-01-23 02:03","end_time":"2016-01-23 02:03","xj_bridge":"巡检桥梁2222","xj_type":"巡检类型哈哈哈哈","task_desc":"我们的祖国是花园"}
+
+
+已完成的任务
+/task_done
+未处理的任务(主页)
+/
+挂账延期的任务
+/task_gzyq

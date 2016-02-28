@@ -1,0 +1,79 @@
+<html>
+<head>
+<%- include('header') -%>
+<style type="text/css">
+input {
+ 
+            padding: 5px;
+
+}
+</style>
+</head>
+<body>
+<div id="el" class="easyui-layout" style="height:800px">
+
+    <div id="content" region="center" title="<%=task_type%>编辑">
+        <form id="ff" method="post">
+        <table>
+        <tbody>
+        <tr>
+            <td>任务名称</td>
+            <td style="padding: 5px"><input class="easyui-validatebox" name="task_name" data-options="required:true, validType:'minLength[1]'" style="width:200px; height:20px"></td>
+        </tr>
+        </tr>
+        <td>开始时间</td>
+        <td style="padding: 5px"><input class="easyui-datetimebox" name="start_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+        </tr>
+        </tr>
+        <td>结束时间</td>
+        <td style="padding: 5px"><input class="easyui-datetimebox" name="end_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+        </tr>
+	 <% if (type=='1') { %>
+        <td>巡检桥梁</td>
+        <%}%>
+        <% if (type=='2'||type=='3') { %>
+        <td><%=task_type%>桥梁</td>
+        <%}%>
+	<td style="padding: 5px"><input class="easyui-validatebox" name="xj_bridge" data-options="required:true" style="width:200px; height:20px"></td>
+        </tr>
+        <% if (type=='1') { %>
+        <td>巡检类型</td>
+        <td style="padding: 5px"><input class="easyui-validatebox" name="xj_type" data-options="required:true" style="width:200px; height:20px"></td>
+        </tr>
+        <%}%>
+        <td>任务描述</td>
+        <td><textarea cols="50" rows="5" name="task_desc" class="easyui-validatebox" data-options="required:true"></textarea></td>
+        </tbody>
+            </table>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="task_submit()">保存</a>
+            </form>
+    </div>
+</div>
+</body>
+<script>
+    function task_submit() {
+        $('#ff').form('submit', {
+            url: 'taskeditor?type=<%=type%>',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (data) {
+                data = $.parseJSON(data);
+                alert(data.status);
+                var p = $('#el').layout('panel','center');  // get the panel
+                p.panel('refresh');  // refresh the panel content
+
+            }
+
+        })
+    }
+    $.extend($.fn.validatebox.defaults.rules, {
+    minLength: {
+        validator: function(value, param){
+            return value.length >= param[0];
+        },
+        message: '不能为空值'
+    }
+});
+    </script>
+</html>

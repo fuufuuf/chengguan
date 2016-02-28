@@ -1,0 +1,47 @@
+<html>
+<head>
+    <%- include('header') -%>
+</head>
+<body>
+<div class="easyui-layout" style="height:800px; width:1500px">
+    <div region="west" split="true" title="导航栏" style="width:150px;">
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showcontent('t1')">未办理任务</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('t2')">已办理任务</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('t3')">延期任务</a></li>
+
+        </ul>
+    </div>
+
+<div id='ppp' region="center" style="width:1350px;">
+<iframe id='new_url' src="/get_task" height="800" width="1350" scrolling="auto"></iframe>
+
+</div>
+
+    </div>
+</div>
+</body>
+<script>
+
+function showcontent(t){
+    switch(t)
+    {
+    case 't1':
+        $('#new_url').attr("src", "/get_task");
+        break;
+    case 't2':
+        $('#new_url').attr("src", "/task_done");
+        break;
+    case 't3':
+        $('#new_url').attr("src", "/task_gzyq");
+        break;      
+    default:
+        $('#new_url').attr("src", "/get_task");
+        break;
+}
+$('#ppp').panel('open').panel('refresh');
+
+
+    }
+    </script>
+</html>

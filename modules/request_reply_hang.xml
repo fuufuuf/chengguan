@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<request>
+    <function name='TaskDispatch'/>
+    <params>
+        <TaskNum>275222787</TaskNum>
+        <ReplayDate>2012-04-26 15:10:54</ReplayDate>
+        <ReplayCode>2</ReplayCode>
+        <ReplayInfo>1</ReplayInfo>
+        <ReplayMemo>经核实，情况符合实际情况。同意挂账</ReplayMemo>
+    </params>
+</request>
+

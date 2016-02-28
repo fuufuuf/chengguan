@@ -1,0 +1,53 @@
+'{"request":{"function":{"name":"TaskDispatch"},
+
+
+"params":{"TaskNum":"1204260441",
+"FindTime":"2012-04-26 15:08:25",
+"EventSource":"监督员上报",
+"EventType":"事件",
+"MainType":"宣传广告",
+"SubType":"广告招牌破损",
+"DistrictCode":"区编码",
+"DistrictName":"区",
+"StreetCode":"街道编码",
+"StreetName":"街道",
+"CommunityCode":"社区编码",
+"CommunityName":"社区",
+"CoordinateX":"x坐标2000",
+"CoordinateY":"y坐标2000",
+"EventAddress":"距离都市华城西南方向17米",
+"EventDescription":"任港路路南都市华城小区大门向里5米路东侧有…",
+"EventPositionMap":"http://32.142.15.6/…/Event120077734/PosMap.gif",
+"SendTime":"2012-04-26 15:20:44",
+"DealEndTime":"2012-05-26 15:20:44",
+"SendMemo":"该问题请城管局根据情况处理",
+"DealTimeLimit":"256.00",
+"DealUnit":"50",
+"EventPictures":
+{"num":"2",
+"picture":[{"name":"201111280656.jpg","url":"http://32.142.15.6/…/1_1_201111280656.jpg"},{"name":"201111280680.jpg","url":"http://32.142.15.6/…/1_2_201111280680.jpg"}]},
+"EventMedias":{"num":"1","media":{"name":"1003027204.wav","url":"http://32.142.15.6/…/1_1_1003027204.wav "}}}}}'
+
+
+
+insert into BMSInspection.dbo.CG_taskdispatch(TaskNum, FindTime, EventSource, EventType, MainType, SubType, DistrictCode,
+DistrictName,StreetCode, StreetName, CommunityCode, CommunityName, CoordinateX, CoordinateY, EventAddress, EventDescription,
+EventPositionMap, SendTime, DealEndTime, SendMemo, DealTimeLimit, DealUnit, Status)
+values('124424505', '2012-04-26 15:08:25', '监督员上报', '事件', '宣传广告', '广告招牌破损', '区编码',
+'区街道编码', '街道', '社区编码', '社区', 2001,  2002, '距离都市华城西南方向17米', '任港路路南都市华城小区大门向里5米路东侧有…',
+'http://32.142.15.6/…/Event120077734/PosMap.gif', '2012-04-26 15:20:44', '2012-05-26 15:20:44', '该问题请城管局根据情况处理', '256', 50, '00','%s')
+
+
+insert into BMSInspection.dbo.CG_taskdispatch(TaskNum, FindTime, EventSource, EventType, MainType, SubType, DistrictCode,
+DistrictName,StreetCode, StreetName, CommunityCode, CommunityName, CoordinateX, CoordinateY, EventAddress, EventDescription,
+EventPositionMap, SendTime, DealEndTime, SendMemo, DealTimeLimit, DealUnit, Status)
+values('124424505', '2012-04-26 15:08:25', '监督员上报', '事件', '宣传广告', '广告招牌破损', '区编码', '区',
+'NaN', '街道', '社区编码', 社区,  2001, '2002', '距离都市华城西南方向17米', '任港路路南都市华城小区大门向里5米路东侧有…',
+'http://32.142.15.6/…/Event120077734/PosMap.gif', '2012-04-26 15:20:44', '2012-05-26 15:20:44', '该问题请城管局根据情况处理', 256, '50','00')
+
+
+<Request>
+<ResultCode>0</ResultCode>
+<ResultDesc>错误描述</ResultDesc>
+<ResultMemo>调用方法名称</ResultMemo>
+</Request>

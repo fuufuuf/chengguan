@@ -1,0 +1,138 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <%- include('header') -%>
+</head>
+
+<body>
+<div id="cc" class="easyui-layout" style="height:500px; padding: 20px">
+    <div data-options="region:'center',title:'处理案件'" style="padding:5px;left:10px;">
+        <h2>案件信息</h2>
+
+        <table id='dg_source' class="easyui-datagrid" toolbar="#toolbar" data-options="nowrap:false,singleSelect:true">
+            <thead>
+            <tr>
+                <th data-options="field:'code1',width:100"></th>
+                <th data-options="field:'code2',width:500"></th>
+                <th data-options="field:'code3',width:100"></th>
+                <th data-options="field:'code4',width:500"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>案件编号</td>
+                <td id="task_num"><%=details.TaskNum%></td>
+                <td>建立时间</td>
+                <td><%=details.FindTime%></td>
+            </tr>
+            <tr>
+                <td>案件来源</td>
+                <td><%=details.FindTime%></td>
+                <td>案件类型</td>
+                <td><%=details.EventSource%></td>
+            </tr>
+            <tr>
+                <td>案件大类</td>
+                <td><%=details.MainType%></td>
+                <td>案件小类</td>
+                <td><%=details.SubType%></td>
+            </tr>
+            <tr>
+                <td>所属城区</td>
+                <td><%=details.DistrictName%></td>
+                <td>所属街道-社区</td>
+                <td><%=details.StreetName%>-<%=details.CommunityName%></td>
+            </tr>
+            <tr>
+                <td>案件地址(坐标)</td>
+                <td><%=details.EventAddress%>(<%=details.CoordinateX%>,<%=details.CoordinateY%>)</td>
+
+            </tr>
+            <tr>
+                <td>问题描述</td>
+                <td><%=details.EventDescription%></td>
+            </tr>
+            <tr>
+                <td>处置截止时间</td>
+                <td><%=details.DealEndTime%></td>
+                <td>处理时限</td>
+                <td><%=details.FindTime%></td>
+            </tr>
+            <tr>
+                <td>位置图路径</td>
+                <td><img src=<%=details.EventPositionMap%> height="200" width="200"></td>
+            </tr>
+            <tr>
+                <td>案件附件</td>
+                <td>
+                    <% img.forEach(function(img){ %>
+                    <%- include('one_attach', {LocalURL:img.LocalURL}) %>
+                    <% }) %>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" onclick="javascipt:location.href='/'">回退</a>
+</div>
+
+        <h2>案件处理</h2>
+        <form id="ff" method="post" enctype="multipart/form-data">
+        <p>处理人 <input class="easyui-textbox" name="person" style="width:300px; padding:5px"></p>
+        <p>处理详情</p> <textarea cols="80" rows="10" name='details' style="padding:5px"></textarea>
+        <table id="dg" class="easyui-datagrid" data-options="nowrap:false,singleSelect:true" style="width:1000px; padding:5px">
+            <thead>
+            <tr>
+                <th data-options="field:'code1',width:100"></th>
+                <th data-options="field:'code2',width:500"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <div>
+                        <td>选择附件</td>
+                        <td><p>photo:<input type='file' name='photo'></p><td>
+                    </div>
+                <tr>
+
+            </tbody>
+        </table>
+        </form>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="append_att()">添加附件</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="task_submit()">提交</a>
+    </div>
+</div>
+</body>
+
+<script>
+    var i = 0;
+    function append_att() {
+        i++;
+        var content = "<p>photo:<input type='file' name='photo"+i+"'></p>";
+        $('#dg').datagrid('insertRow', {
+
+
+            row: {
+                code1: '选择附件',
+                code2: content
+            }
+        });
+
+    }
+
+    function task_submit() {
+        var url = '/task_done';
+	$('#ff').form('submit', {
+            url: 'reply_task',
+            onSubmit: function (param) {
+                param.task_num = $('#task_num').text();
+            },
+            success: function (data) {
+                alert(data);
+		location.href = url;
+		
+            }
+
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head>
+    <%- include('header') -%>
+</head>
+<body>
+
+<div class="easyui-layout" style="width:800px;height:1200px;">
+    <div region="west" split="true" title="选择桥梁 " style="width:250px;">
+        <p style="padding:5px;margin:0;">选择桥梁</p>
+        <ul id="tt" class="easyui-tree" data-options="
+        url:'tree',
+        onSelect:function(node){
+        var comp = $('#tt').tree('getSelected').ComponentStructureID;
+        $('#cc').combobox('reload','comp?id='+comp);
+        }
+        "></ul>
+    </div>
+    <div id="content" region="center" title="其他信息" style="padding:5px;">
+        <p>选择病害类型</p>
+        <select id="cc" class="easyui-combobox" name="dept" style="width:200px;"
+                data-options="valueField:'value',textField:'lable',url:'comp?id=0000'">
+        </select>
+        <p>手工输入1<input class="easyui-validatebox" name="input1" data-options="required:true" style="width:200px; height:20px"></p>
+        <p>手工输入2<input class="easyui-validatebox" name="input2" data-options="required:true" style="width:200px; height:20px"></p>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="se()">查询</a>
+
+    </div>
+
+</div>
+</body>
+<script>
+
+    function se(){
+
+        var comp = $('#tt').tree('getSelected').ComponentStructureID;
+
+        $('#cc').combobox('reload','comp?id='+comp);
+
+    }
+
+    </script>
+</html>

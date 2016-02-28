@@ -1,0 +1,153 @@
+<html>
+<head>
+
+    <%- include('header') -%>
+</head>
+
+<body>
+
+
+
+<div id="cc" class="easyui-layout" style="height:800px;">
+
+<div data-options="region:'center',title:'内容预览'" style="padding:5px;background:#eee;">
+    <!-- 推送的内容为图文消息或者报告-->
+    <% if (type=='0'|| type=='5') { %>
+    <h4>基本信息</h4>
+    <table class="easyui-datagrid" data-options="nowrap:false,singleSelect:true" toolbar="#toolbar" style="height:200px">
+        <thead>
+        <tr>
+            <th data-options="field:'code1',width:100">信息</th>
+            <th data-options="field:'code2',width:500">内容</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>推送名称</td>
+            <td><%=c.title%></td>
+
+        </tr>
+        <tr>
+            <td>创建时间</td>
+            <td><%=c.create_time%></td>
+        </tr>
+        <tr>
+            <td>推送类型</td>
+            <td><%=typec%></td>
+        </tr>
+        </tbody>
+        </table>
+    <h4>内容详情</h4>
+    <iframe src="<%=url%>" height="600" width="1200"></iframe>
+
+
+    <%}%>
+    <!-- 推送的内容为各种任务-->
+    <% if (type=='1'|| type=='2'||type=='3') { %>
+    <table class="easyui-datagrid" data-options="nowrap:false,singleSelect:true" toolbar="#toolbar" style="height:800px">
+        <thead>
+        <tr>
+            <th data-options="field:'code1',width:200">信息</th>
+            <th data-options="field:'code2',width:800">内容</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>推送名称</td>
+            <td><%=c.task_name%></td>
+
+        </tr>
+        <tr>
+            <td>创建时间</td>
+            <td><%=c.create_time%></td>
+        </tr>
+        <tr>
+            <td>推送类型</td>
+            <td><%=typec%></td>
+        </tr>
+        <tr>
+            <td>任务开始时间</td>
+            <td><%=c.start_time%></td>
+        </tr>
+        <tr>
+            <td>任务结束时间</td>
+            <td><%=c.end_time%></td>
+        </tr>
+        <tr>
+            <td>桥梁名称</td>
+            <td><%=c.xj_bridge%></td>
+        </tr>
+        <tr>
+            <td>巡检类型</td>
+            <td><%=c.xj_type%></td>
+        </tr>
+        <tr>
+            <td>任务描述</td>
+            <td><textarea cols="50" rows="5" name="task_desc"><%=c.task_desc%></textarea></td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <%}%>
+<!--推送的内容为预警信息-->
+    <% if (type=='4') { %>
+    <table class="easyui-datagrid" data-options="nowrap:false, singleSelect:true" toolbar="#toolbar" style="height:800px">
+        <thead>
+        <tr>
+            <th data-options="field:'code1',width:200">信息</th>
+            <th data-options="field:'code2',width:800">内容</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>推送名称</td>
+            <td><%=c.title%></td>
+
+        </tr>
+        <tr>
+            <td>创建时间</td>
+            <td><%=c.create_time%></td>
+        </tr>
+        <tr>
+            <td>推送类型</td>
+            <td>预警信息</td>
+        </tr>
+        <tr>
+            <td>桥梁名称</td>
+            <td><%=cs.bridge_name%></td>
+        </tr>
+        <tr>
+            <td>监测点</td>
+            <td><%=cs.check_name%></td>
+        </tr>
+        <tr>
+            <td>监测位置</td>
+            <td><%=cs.check_position%></td>
+        </tr>
+        <tr>
+            <td>超限时间</td>
+            <td><%=cs.over_time%></td>
+        </tr>
+        <tr>
+            <td>超限值</td>
+            <td><%=cs.over_value%></td>
+        </tr>
+        <tr>
+            <td>预警值</td>
+            <td>预警为<%=cs.yr%>色预警，下限为<%=cs.over_min%> <%=cs.over_min_unit%>,上限为<%=cs.over_max%> <%=cs.over_max_unit%>。预期回复时间<%=cs.recover_time%></td>
+        </tr>
+        </tbody>
+    </table>
+    <%}%>
+    <div id="toolbar">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" onclick="location='/push'">返回</a>
+    </div>
+
+</div>
+    </div>
+</body>
+</html>

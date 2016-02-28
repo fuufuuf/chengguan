@@ -1,0 +1,103 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>中交城管管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/icon.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/demo.css">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.easyui.min.js"></script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px 30px;
+        }
+        .ftitle{
+            font-size:14px;
+            font-weight:bold;
+            color:#666;
+            padding:5px 0;
+            margin-bottom:10px;
+            border-bottom:1px solid #ccc;
+        }
+        .fitem{
+            margin-bottom:5px;
+        }
+        .fitem label{
+            display:inline-block;
+            width:80px;
+        }
+    </style>
+</head>
+<body>
+<h2>任务信息</h2>
+<div class="demo-info" style="margin-bottom:10px">
+    <div class="demo-tip icon-tip">&nbsp;</div>
+    <div>Click the buttons on datagrid toolbar to do crud actions.</div>
+</div>
+<div class="easyui-tabs" style="width:1000px;height:500px">
+    <div title="待办任务" style="padding:10px">
+        <table id="dg" title="未批复延期/挂账" class="easyui-datagrid" style="width:1000px;height:500px"
+
+               url="accredit?status=0"
+               toolbar="#toolbar" pagination="true"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="TaskNum">任务编号</th>
+                <th field="ApplayOpter">申请人</th>
+                <th field="ReplyDate">申请时间</th>
+                <th field="ReplyCode">申请类型</th>
+                <th field="ApplyDelayInfo">延期时间</th>
+                <th field="ApplyMemo">申请理由</th>
+            </tr>
+            </thead>
+        </table>
+
+        <div id="toolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showDetail()">详细信息</a>
+        </div>
+    </div>
+
+    <div title="已办任务" style="padding:10px">
+        <table id="dg_done" title="已批复延期/挂账" class="easyui-datagrid" style="width:1000px;height:500px"
+
+               url="accredit?status=1"
+               toolbar="#toolbar2" pagination="true"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="TaskNum">任务编号</th>
+                <th field="ReplyDate">申请时间</th>
+                <th field="ReplyDate">答复时间</th>
+                <th field="ReplyCode">申请类型</th>
+                <th field="ReplayInfo">申请结果</th>
+                <th field="ReplayMemo">答复意见</th>
+
+            </tr>
+            </thead>
+        </table>
+        <div id="toolbar2">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showDetail()">详细信息</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script>
+
+    function showDetail(){
+        var url;
+        var row = $('#dg').datagrid('getSelected');
+
+        if(row){
+
+            url = 'task_details?id='+row.TaskNum;
+            location.href = url;//location.href实现客户端页面的跳转
+        }
+
+
+    }
+</script>
+</html>

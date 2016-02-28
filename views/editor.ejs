@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" charset="utf-8" src="/lib/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/lib/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="/lib/ueditor/lang/zh-cn/zh-cn.js"> </script>
+    <%- include('header') -%>
+</head>
+
+<body>
+
+<div class="easyui-layout" style="height:800px;">
+    <div id="content" region="center"  title=<%=title%>>
+<form id="ff" method="post" enctype="multipart/form-data">
+    <h4>标题: <input type="text" name="title" /></h4>
+    <!--<input type="hidden" name="html_contents" id="htmlc"/>-->
+<script id="editor" type="text/plain" style="width:1000px;height:500px;"></script>
+    <% if (type==5) { %>
+    <p type="padding:5px">上传附件:<input type='file' name='report'></p>
+    <%}%>
+    <button type="button" onclick="task_submit()" sytle="margin-left:250px; width:60px;">保存</button>
+</form>
+    </div>
+    </div>
+</body>
+
+<script>
+    var ue = UE.getEditor('editor');
+    var task_submit = function(){
+
+    ue.ready(function() {
+
+        $('#ff').form('submit', {
+            url: '/editor?type=<%=type%>',
+            onSubmit: function (param) {
+                param.p1 = ue.getContent();
+            },
+            success: function (data) {
+
+                data = $.parseJSON(data);
+                alert(data.status);
+          
+            }
+        })
+    });
+}
+</script>
+</html>

@@ -1,0 +1,79 @@
+<html>
+<head>
+    <%- include('header') -%>
+</head>
+<body>
+<div class="easyui-tabs" style="height:500px">
+    <!-- 相关的结果-->
+    <div title="人员到位率" style="padding:10px">
+<table id="dg_2" title="选择人员" class="easyui-datagrid" style="height:500px"
+
+       url="dk_summ?type=2"
+       toolbar="#toolbar1" pagination="true"
+       rownumbers="true" fitColumns="true" singleSelect="true">
+    <thead>
+    <tr>
+        <th field="UserID">用户ID</th>
+        <th field="Username">用户名</th>
+        <th field="operation" data-options="
+            formatter:function(value,row,index){
+        
+                    return $('#opbar2').html();
+                
+            }">
+            操作
+        </th>
+    </tr>
+    </thead>
+    <div id="opbar2" style="display:none;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="chek_dk('2','#dg_2')">查看打卡率</a>
+</div>
+</table>
+</div>
+    <!-- 不相关的结果-->
+    <div title="组到位率" style="padding:10px">
+        <table id="dg_1" title="选择工作组" class="easyui-datagrid" style="height:500px"
+
+               url="dk_summ?type=1"
+               toolbar="#toolbar2" pagination="true"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="GroupDefineID">用户组ID</th>
+                <th field="GroupDefineName">用户组名称</th>
+                        <th field="operation" data-options="
+            formatter:function(value,row,index){
+        
+                    return $('#opbar1').html();
+                
+            }">
+            操作
+        </th>
+            </thead>
+            <div id="opbar1">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="chek_dk('1','#dg_1')">查看打卡率</a>
+            </div>
+        </table>
+</div>
+    </div>
+</body>
+<script>
+function chek_dk(type, dg){
+        var url;
+
+        var row = $(dg).datagrid('getSelected');
+
+        if(row&&type==1){
+
+            url = '/getRate?id='+ row.GroupDefineID +'&name='+ row.GroupDefineName+'&rateType='+type;
+            location.href = url;//location.href实现客户端页面的跳转
+        } else if(row&&type==2){
+
+            url = '/getRate?id='+ row.UserID +'&name='+ row.Username+'&rateType='+type;
+            location.href = url;//location.href实现客户端页面的跳转
+
+        }
+
+    }
+</script>
+</html>

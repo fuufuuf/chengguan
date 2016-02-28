@@ -1,0 +1,74 @@
+<html>
+<head>
+    <%- include('header') -%>
+</head>
+
+<body>
+    <table class="easyui-datagrid" title="案件详情" data-options="nowrap:false, singleSelect:true" toolbar="#toolbar" style="height:500px">
+        <thead>
+        <tr>
+            <th data-options="field:'code1',width:100"></th>
+            <th data-options="field:'code2',width:500"></th>
+            <th data-options="field:'code3',width:100"></th>
+            <th data-options="field:'code4',width:500"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>案件编号</td>
+            <td><%=details.TaskNum%></td>
+            <td>建立时间</td>
+            <td><%=details.FindTime%></td>
+        </tr>
+        <tr>
+            <td>案件来源</td>
+            <td><%=details.FindTime%></td>
+            <td>案件类型</td>
+            <td><%=details.EventSource%></td>
+        </tr>
+        <tr>
+            <td>案件大类</td>
+            <td><%=details.MainType%></td>
+            <td>案件小类</td>
+            <td><%=details.SubType%></td>
+        </tr>
+        <tr>
+            <td>所属城区</td>
+            <td><%=details.DistrictName%></td>
+            <td>所属街道-社区</td>
+            <td><%=details.StreetName%>-<%=details.CommunityName%></td>
+        </tr>
+        <tr>
+            <td>案件地址(坐标)</td>
+            <td><%=details.EventAddress%>(<%=details.CoordinateX%>,<%=details.CoordinateY%>)</td>
+
+        </tr>
+        <tr>
+            <td>问题描述</td>
+            <td><%=details.EventDescription%></td>
+        </tr>
+        <tr>
+            <td>处置截止时间</td>
+            <td><%=details.DealEndTime%></td>
+            <td>处理时限</td>
+            <td><%=details.FindTime%></td>
+        </tr>
+        <tr>
+            <td>位置图路径</td>
+            <td><img src=<%=details.EventPositionMap%> height="200" width="200"></td>
+        </tr>
+        <tr>
+            <td>案件附件</td>
+            <td>
+            <% img.forEach(function(img){ %>
+            <%- include('one_attach', {LocalURL:img.LocalURL}) %>
+            <% }) %>
+            </td>
+        </tr>
+        </tbody>
+        <div id="toolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" onclick="location='<%=web_source%>'">返回</a>
+        </div>
+    </table>
+</body>
+</html>

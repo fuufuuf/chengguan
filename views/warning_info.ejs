@@ -1,0 +1,101 @@
+<html>
+<head>
+<%- include('header') -%>
+<style type="text/css">
+input {
+ 
+            padding: 5px;
+
+}
+</style>
+</head>
+<body>
+<div id="el" class="easyui-layout" style="height:800px">
+
+    <div id="content" region="center" title="预警信息编辑">
+        <form id="ff" method="post">
+        <table>
+        <tbody>
+        <tr>
+            <td>桥梁名</td>
+            <td style="padding: 5px"><input class="easyui-validatebox" name="bridge_name" data-options="required:true, validType:'minLength[1]'" style="width:200px; height:20px"></td>
+        </tr>
+        <tr>
+            <td>监测点名</td>
+            <td style="padding: 5px"><input class="easyui-validatebox" name="check_name" data-options="required:true" style="width:200px; height:20px"></td>
+        </tr>
+        <tr>
+            <td>具体位置</td>
+            <td style="padding: 5px"><input class="easyui-validatebox" name="check_position" data-options="required:true" style="width:200px; height:20px"></td>
+        </tr>
+            <td>超限时间</td>
+            <td style="padding: 5px"><input class="easyui-datetimebox" name="over_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+        </tr>
+        <tr>
+            <td>超限值</td>
+            <td style="padding: 5px"><input class="easyui-validatebox" name="over_value" data-options="required:true" style="width:200px; height:20px"></td>
+        </tr>
+        <tr>
+            <td>预警值</td>
+            <td style="padding: 5px">
+                <select id="yr" class="easyui-combobox" name="yr" style="width:100px;">
+                    <option></option>
+                    <option>红</option>
+                    <option>黄</option>
+                </select>
+                下限<input class="easyui-validatebox" name="over_min" style="width:100px; height:20px">
+                单位<input class="easyui-validatebox" name="over_min_unit" style="width:50px; height:20px">
+
+                上限<input class="easyui-validatebox" name="over_max" style="width:100px; height:20px">
+                单位<input class="easyui-validatebox" name="over_max_unit" style="width:50px; height:20px">
+            </td>
+        </tr>
+        <tr>
+            <td>恢复时间</td>
+            <td style="padding: 5px"><input class="easyui-datetimebox" name="recover_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+        </tr>
+         <tr>
+            <td>是否推送城管系统</td>
+            <td style="padding: 5px">
+                <select id="zhcg" class="easyui-combobox" name="zhcg_tag" style="width:100px;">
+                    <option value='0'>否</option>
+                    <option value='1'>是</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+            </table>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="task_submit()">提交</a>
+            </form>
+    </div>
+</div>
+</body>
+<script>
+    function task_submit() {
+
+        var url = '/warning_info'
+
+        $('#ff').form('submit', {
+            url: 'warning_info?type=4',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (data) {
+                data = $.parseJSON(data);
+                alert(data.status);
+                location.href = url;
+
+            }
+
+        })
+    }
+    $.extend($.fn.validatebox.defaults.rules, {
+    minLength: {
+        validator: function(value, param){
+            return value.length >= param[0];
+        },
+        message: '不能为空值'
+    }
+});
+    </script>
+</html>

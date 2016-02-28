@@ -1,0 +1,38 @@
+      <html>
+<head>
+<%- include('header') -%>
+</head>
+<body>
+      <form id="ff" method="post">
+            输入<input class="easyui-validatebox" name="bridge_name" data-options="required:true, validType:'email'" style="width:200px; height:20px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="task_submit()">提交</a>
+        </form>
+        
+</body>
+<script>
+    function task_submit() {
+        $('#ff').form('submit', {
+            url: 'warning_info?type=4',
+            onSubmit:function(){
+			return $(this).form('validate');
+		},
+            success: function (data) {
+                data = $.parseJSON(data);
+                alert(data.status);
+
+            }
+
+        })
+    }
+    $.extend($.fn.validatebox.defaults.rules, {
+    minLength: {
+        validator: function(value, param){
+            return value.length >= param[0];
+        },
+        message: '不能为空值哦亲'
+    }
+});
+    </script>
+
+
+</html>

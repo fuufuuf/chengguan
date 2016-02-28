@@ -1,0 +1,53 @@
+<html>
+<head>
+    <%- include('header') -%>
+</head>
+<body>
+<div class="easyui-layout" style="width:800px;height:1200px; padding:50px">
+
+    <div id="content" region="center"  title="任务推送编辑">
+
+        <form id="ff" method="post">
+
+        <h4>任务类型</h4>
+        <select id="cc" class="easyui-combobox" name="dept" style="width:200px;"
+                data-options="valueField:'value',textField:'lable'">
+            <option>巡检任务</option>
+            <option>养护任务</option>
+            <option>维修任务</option>
+        </select>
+        <h4>推送人</h4>
+        <table id="dg" title="可推送的消息" class="easyui-datagrid" style="height:300px"
+               url="post_zjuser" pagination="true" toolbar="#toolbar"
+               rownumbers="true" fitColumns="true" singleSelect="false">
+            <thead>
+            <tr>
+                <th field="user">姓名</th>
+                <th field="createdAt">创建时间</th>
+                <th field="channels">所属组</th>
+                <th field="installationId">设备ID</th>
+            </tr>
+            </thead>
+        </table>
+        <p>手工输入2<input class="easyui-validatebox" name="input2" data-options="required:true" style="width:200px; height:20px"></p>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="task_submit()">提交</a>
+</form>
+    </div>
+</div>
+</body>
+<script>
+    function task_submit() {
+        $('#ff').form('submit', {
+            url: 'zj_taskpush',
+            onSubmit: function (param) {
+                param.install_id = $('#dg').datagrid('getSelected').installationId;
+            },
+            success: function (data) {
+                alert(data)
+            }
+
+        })
+    }
+
+</script>
+</html>
