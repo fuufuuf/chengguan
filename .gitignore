@@ -28,3 +28,4 @@ build/Release
 /public/cg_imgs/*.png
 /public/cg_imgs/*.jpg
 /public/editor/html/*
+settings.js
