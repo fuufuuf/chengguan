@@ -1041,6 +1041,60 @@ function complementHistoryDate(numMonth) {
 }
 
 
+
+/*获取手机图片并且保存DamagePicUpload?damageID=testid
+http://ip/DamagePicUpload?damageID=testid
+
+ 数据库表名称
+
+ BMSInspection.dbo.CG_MobilePic
+ 表项
+
+ damage_id-病害id
+ pic_name-图片名称
+ local_save-本地存储位置
+ url-网络访问url
+*/
+router.post('/DamagePicUpload', function(req, res, next) {
+
+    var form = new formidable.IncomingForm();
+    form.encoding = 'utf-8';
+    form.uploadDir = path.join(path.join(path.dirname(__dirname), 'public/damage_imgs'));
+    form.keepExtensions = true;
+    var new_path;
+    var name;
+
+    form.parse(req, function (err, fields, files) {
+//one pic only
+        for (item in files) {
+
+            if (files[item].name != '') {
+                new_path = path.join(form.uploadDir, files[item].name);
+                fs.renameSync(files[item].path, new_path);
+                name = files[item].name;
+                console.log(name, new_path);
+            }
+
+        }
+//保存到数据库
+        var sql = "insert into BMSInspection.dbo.CG_MobilePic(damage_id, pic_name, local_save, url) values('%s','%s','%s','%s')";
+        var url = host+':'+port+'/damage_imgs/'+name;
+        sql = util.format(sql, req.query.damageID, name, new_path, url);
+        console.log(sql);
+        sql_exec.sqlexec(sql, function (err, rowCount, row) {
+
+            var t = {total: rowCount, rows: row};
+            console.log(t);
+            res.end('true');
+
+        });
+
+
+    });
+
+})
+
+
 //每天8点准时推送任务一次run_task()
 
 c = new Date();//current time
@@ -1051,9 +1105,9 @@ function Run_task(){
 
     console.log('Pushing task ', new Date());
 
-    //a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
+    //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
 
-    var sql_yh = "select a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name from " +
+    var sql_yh = "select a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
         "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
         "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
 
@@ -1094,9 +1148,6 @@ if(c.getHours()<8){
         },n_8-c);
     
 }
-
-console.log(c_8);
-console.log(n_8);
 
 
 module.exports = router;
