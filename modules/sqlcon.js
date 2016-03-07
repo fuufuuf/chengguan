@@ -15,6 +15,27 @@ var config = {
 };
 
 
+Date.prototype.Format = function(fmt)
+{
+    var o = {
+        "M+" : this.getMonth()+1,                 //
+        "d+" : this.getDate(),                    //
+        "h+" : this.getHours(),                   //
+        "m+" : this.getMinutes(),                 //
+        "s+" : this.getSeconds(),                 //
+        "q+" : Math.floor((this.getMonth()+3)/3), //
+        "S"  : this.getMilliseconds()             //
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
+
+
+
 var sqlexec = function(sql, callback) {
     var conn = new Connection(config);
     conn.on('connect', function(err) {
@@ -400,6 +421,136 @@ var user_validation = function(user, passwd, callback_1){
         callback_1(err, results);
     });
 };
+
+
+
+var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
+
+    var sql_pool = [];
+
+    async.series({
+
+        yh:function(callback){
+
+        sqlexec(sql_yh, function(err, rowCount, row){
+            row.forEach(function(item){
+            var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+            var contents = {};
+            contents['task_name'] = item.task_name;
+            contents['start_time'] = item.start_time;
+            contents['end_time'] = item.end_time;
+            contents['xj_bridge'] = item.xj_bridge;
+            contents['task_desc'] = item.task_desc;
+            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 2, 0, 0, item.dept);
+            sql_pool.push(sql);
+
+    })
+            callback(null, 'yh');
+
+            });
+
+
+
+        },
+        xj:function(callback){
+                    sqlexec(sql_yh, function(err, rowCount, row){
+            row.forEach(function(item){
+            var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+            var contents = {};
+   //获取巡检桥梁接口GetExaminePlanTaskById(string user_name, string validated_info, string taskID) 
+            //http:/service_host/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=xxxx&validated_info=xxxx&taskID=xxxx
+            var req = "http://%s/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=not_in_use&validated_info=not_in_use&taskID=%s"
+            var req = util.format(req, settings.service_host, item.TaskID)
+
+            request(req, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+
+
+
+
+             }
+         })
+
+            contents['task_name'] = item.task_name;
+            contents['start_time'] = item.start_time;
+            contents['end_time'] = item.end_time;
+            contents['xj_bridge'] = item.xj_bridge;
+            contents['task_desc'] = item.task_desc;
+            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 2, 0, 0), item.dept);
+            sql_pool.push(sql);
+
+    })
+            callback(null, 'yh');
+
+            });
+
+
+
+
+
+        },
+        wx:function(callback){
+
+
+
+
+        }
+
+
+
+    },function(err, results){
+
+
+
+
+    })
+
+
+
+}
+
+/*
+test function
+*/
+
+var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
+        "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
+        "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
+
+auto_push(sql_yh, null, null, function(err, row){
+
+
+        //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
+
+    /*
+     router.post('/taskeditor', function(req, res, next) {
+
+
+
+     var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg) values('%s', '%s', '%s', '%s', '%s', '%s')";
+     var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
+     //always set zhcg=0
+     sql = util.format(sql, req.body.task_name, JSON.stringify(req.body), date, req.query.type,0, 0);
+     sql_exec.sqlexec(sql, function (err, rowCount, row) {
+
+     var t = {total: rowCount, rows: row};
+     console.log(t);
+
+     res.json({status: PUSH_STATUS_PASS});
+
+     });
+
+     });
+
+     contents
+     {"task_name":"养护任务名称","start_time":"2016-01-26 02:03","end_time":"2016-01-30 02:03","xj_bridge":"养护任务桥梁","task_desc":"养护任务桥梁描述"}
+
+    * */
+
+
+})
+
 //user validation test
 //user_validation('admin999988','1234567',function(err, result){
 //
