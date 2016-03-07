@@ -55,6 +55,26 @@ var PUSH_STATUS_PASS = '编辑成功！请到推送管理界面进行推送';
 
 // });
 
+Date.prototype.Format = function(fmt)
+{
+    var o = {
+        "M+" : this.getMonth()+1,                 //
+        "d+" : this.getDate(),                    //
+        "h+" : this.getHours(),                   //
+        "m+" : this.getMinutes(),                 //
+        "s+" : this.getSeconds(),                 //
+        "q+" : Math.floor((this.getMonth()+3)/3), //
+        "S"  : this.getMilliseconds()             //
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
+
+
 router.get('/new_layout', function(req, res, next){
 
   res.render('new_layout');
@@ -971,26 +991,6 @@ router.get('/getGroupMems', function(req, res, next) {
 })
 
 
-Date.prototype.Format = function(fmt)
-{
-    var o = {
-        "M+" : this.getMonth()+1,                 //
-        "d+" : this.getDate(),                    //
-        "h+" : this.getHours(),                   //
-        "m+" : this.getMinutes(),                 //
-        "s+" : this.getSeconds(),                 //
-        "q+" : Math.floor((this.getMonth()+3)/3), //
-        "S"  : this.getMilliseconds()             //
-    };
-    if(/(y+)/.test(fmt))
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-    for(var k in o)
-        if(new RegExp("("+ k +")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-    return fmt;
-}
-
-
 function push_n2c(n){
     var x;
 
@@ -1105,39 +1105,17 @@ function Run_task(){
 
     console.log('Pushing task ', new Date());
 
-    //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
 
-    /*
-     router.post('/taskeditor', function(req, res, next) {
-
-
-
-     var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg) values('%s', '%s', '%s', '%s', '%s', '%s')";
-     var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-     //always set zhcg=0
-     sql = util.format(sql, req.body.task_name, JSON.stringify(req.body), date, req.query.type,0, 0);
-     sql_exec.sqlexec(sql, function (err, rowCount, row) {
-
-     var t = {total: rowCount, rows: row};
-     console.log(t);
-
-     res.json({status: PUSH_STATUS_PASS});
-
-     });
-
-     });
-
-    * */
     ///养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修/巡检桥梁，e任务描述
 
-    var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
+    var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_bridge, a.ExecutionGroup as dept from " +
         "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
         "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
 ///维修任务 - a任务名称，b任务开始时间，c任务结束时间，d维修/巡检桥梁，e任务描述
     var sql_wx = "select MaintainTaskMadeTime as create_time, MaintainTaskID, MaintainTaskName as task_name, ExpectBeginTime start_time, ExpectEndTime as end_time, MaintainTaskDes as task_desc, ExecuteWorkGroup as dept" +
         "from [BMSInspection].[dbo].[Bridge_MaintainTask]";
 //巡检任务包含：a 任务名称，b任务开始时间，c任务结束时间，d 巡检桥梁 e 巡检类型 f 任务描述 -no type(e) here, need to be added once confirmed
-    var sql_xj = "select b.MakeTime as create_time, a.TaskID, b.PlanName as task_name, a.TaskStartTime  as start_time, a.TaskEndTime as end_time, b.PlanContent as task_desc, TaskExeGroup as dept " +
+    var sql_xj = "select a.TaskID, b.MakeTime as create_time, a.TaskID, b.PlanName as task_name, a.TaskStartTime  as start_time, a.TaskEndTime as end_time, b.PlanContent as task_desc, TaskExeGroup as dept " +
         "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b" +
         "where a.PlanID=b.PlanID";
 
