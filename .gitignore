@@ -30,3 +30,4 @@ build/Release
 /public/editor/html/*.html
 settings.js
 .idea/workspace.xml
+.idea/workspace.xml
