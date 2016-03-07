@@ -453,48 +453,60 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
 
         },
         xj:function(callback){
-                    sqlexec(sql_yh, function(err, rowCount, row){
-            row.forEach(function(item){
-            var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-            var contents = {};
-   //获取巡检桥梁接口GetExaminePlanTaskById(string user_name, string validated_info, string taskID) 
-            //http:/service_host/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=xxxx&validated_info=xxxx&taskID=xxxx
-            var req = "http://%s/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=not_in_use&validated_info=not_in_use&taskID=%s"
-            var req = util.format(req, settings.service_host, item.TaskID)
+            sqlexec(sql_yh, function(err, rowCount, row) {
+                async.each(row, function (item, callback) {
+                    var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+                    var contents = {};
+                    //获取巡检桥梁接口GetExaminePlanTaskById(string user_name, string validated_info, string taskID)
+                    //http:/service_host/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=xxxx&validated_info=xxxx&taskID=xxxx
+                    var req = "http://%s/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=not_in_use&validated_info=not_in_use&taskID=%s";
+                    var req = util.format(req, settings.service_host, item.TaskID);
 
-            request(req, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+                    request(req, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
 
+                            contents['task_name'] = item.task_name;
+                            contents['start_time'] = item.start_time;
+                            contents['end_time'] = item.end_time;
+                           //body item???
+                            contents['xj_bridge'] = body.xj_bridge;
+                            contents['task_desc'] = item.task_desc;
+                            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 1, 0, 0, item.dept);
+                            sql_pool.push(sql);
+                            callback();
 
-
-
-
-             }
-         })
-
-            contents['task_name'] = item.task_name;
-            contents['start_time'] = item.start_time;
-            contents['end_time'] = item.end_time;
-            contents['xj_bridge'] = item.xj_bridge;
-            contents['task_desc'] = item.task_desc;
-            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 2, 0, 0), item.dept);
-            sql_pool.push(sql);
-
-    })
-            callback(null, 'yh');
-
-            });
-
-
-
-
-
-        },
+                        }
+                    })
+                })
+            })},
         wx:function(callback){
+            sqlexec(sql_yh, function(err, rowCount, row) {
+                async.each(row, function (item, callback) {
+                    var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+                    var contents = {};
+                    //http://localhost/InspectionService/RepairService.svc/
+                    //GetBridgeComponentDamageAndMeasureListByMaintainTaskID?MaintainTaskID=30&user_name=admin&validated_info=qswdIM10wuHHvllXl9aUXDwGLD8DiYCqMmVsxCRLNZg%3d&page=1&rows=10&_=1456390570981
+                    var req = "http://%s/InspectionService/RepairService.svc/GetBridgeComponentDamageAndMeasureListByMaintainTaskID?" +
+                        "MaintainTaskID=%s&user_name=admin&validated_info=qswdIM10wuHHvllXl9aUXDwGLD8DiYCqMmVsxCRLNZg%3d&page=1&rows=10&_=1456390570981";
+                    var req = util.format(req, settings.service_host, item.MaintainTaskID);
 
+                    request(req, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
 
+                            contents['task_name'] = item.task_name;
+                            contents['start_time'] = item.start_time;
+                            contents['end_time'] = item.end_time;
+                            //body item???
+                            contents['xj_bridge'] = body.xj_bridge;
+                            contents['task_desc'] = item.task_desc;
+                            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 3, 0, 0, item.dept);
+                            sql_pool.push(sql);
+                            callback();
 
-
+                        }
+                    })
+                })
+            })
         }
 
 
