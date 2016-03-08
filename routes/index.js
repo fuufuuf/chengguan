@@ -1101,7 +1101,7 @@ c = new Date();//current time
 c_8 = new Date(c.Format("yyyy-MM-dd hh:mm:ss").split(' ')[0]+' 08:00:00');//8am current day
 n_8 = new Date(c_8.getTime()+86400000);//8am next day
 
-function Run_task(){
+function Run_task_develop(){
 
     console.log('Pushing task ', new Date());
 
@@ -1119,6 +1119,9 @@ function Run_task(){
         "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b" +
         "where a.PlanID=b.PlanID";
 
+
+    sqlcon.auto_push(sql_yh, sql_wx, sql_xj, function(err, sql_pool))
+
     sql_exec.push(req.body, function(err, row){
 
         mobile_push.push(row.get_result_for_push, function(result){
@@ -1129,6 +1132,12 @@ function Run_task(){
     })
 
         
+}
+
+function Run_task(){
+
+
+    
 }
 
 if(c.getHours()<8){

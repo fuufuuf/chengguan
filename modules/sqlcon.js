@@ -2,6 +2,7 @@ var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var async = require('async');
 var util = require('util');
+var requet = require('request');
 var settings = require('../settings');
 
 var config = {
@@ -424,7 +425,7 @@ var user_validation = function(user, passwd, callback_1){
 
 
 
-var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
+var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
 
     var sql_pool = [];
 
@@ -469,7 +470,7 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
                             contents['start_time'] = item.start_time;
                             contents['end_time'] = item.end_time;
                            //body item???
-                            contents['xj_bridge'] = body.xj_bridge;
+                            contents['xj_bridge'] = JSON.parse(body).BridgeName;
                             contents['task_desc'] = item.task_desc;
                             sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 1, 0, 0, item.dept);
                             sql_pool.push(sql);
@@ -496,8 +497,8 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
                             contents['task_name'] = item.task_name;
                             contents['start_time'] = item.start_time;
                             contents['end_time'] = item.end_time;
-                            //body item???
-                            contents['xj_bridge'] = body.xj_bridge;
+                    //返回的所有bridge name 都是一样的，这里默认取了第一个
+                            contents['xj_bridge'] = JSON.parse(body).rows[0].BridgeName;
                             contents['task_desc'] = item.task_desc;
                             sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 3, 0, 0, item.dept);
                             sql_pool.push(sql);
@@ -513,8 +514,9 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback){
 
     },function(err, results){
 
+        //对于sql_pool里的每一项，执行sql语句
 
-
+        callback_auto(null, sql_pool);
 
     })
 
@@ -530,35 +532,10 @@ var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.
         "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
         "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
 
-auto_push(sql_yh, null, null, function(err, row){
+auto_push(sql_yh, null, null, function(err, sql_pool){
 
+    console.log(sql_pool);
 
-        //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
-
-    /*
-     router.post('/taskeditor', function(req, res, next) {
-
-
-
-     var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg) values('%s', '%s', '%s', '%s', '%s', '%s')";
-     var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-     //always set zhcg=0
-     sql = util.format(sql, req.body.task_name, JSON.stringify(req.body), date, req.query.type,0, 0);
-     sql_exec.sqlexec(sql, function (err, rowCount, row) {
-
-     var t = {total: rowCount, rows: row};
-     console.log(t);
-
-     res.json({status: PUSH_STATUS_PASS});
-
-     });
-
-     });
-
-     contents
-     {"task_name":"养护任务名称","start_time":"2016-01-26 02:03","end_time":"2016-01-30 02:03","xj_bridge":"养护任务桥梁","task_desc":"养护任务桥梁描述"}
-
-    * */
 
 
 })
