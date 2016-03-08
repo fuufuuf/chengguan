@@ -434,54 +434,63 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
         yh:function(callback){
 
         sqlexec(sql_yh, function(err, rowCount, row){
-            row.forEach(function(item){
-            var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-            var contents = {};
-            contents['task_name'] = item.task_name;
-            contents['start_time'] = item.start_time;
-            contents['end_time'] = item.end_time;
-            contents['xj_bridge'] = item.xj_bridge;
-            contents['task_desc'] = item.task_desc;
-            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 2, 0, 0, item.dept);
-            sql_pool.push(sql);
+                row.forEach(function(item){
+                var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+                var contents = {};
+                contents['task_name'] = item.task_name;
+                contents['start_time'] = new Date(item.start_time).Format("yyyy-MM-dd hh:mm:ss");
+                contents['end_time'] = new Date(item.end_time).Format("yyyy-MM-dd hh:mm:ss");
+                contents['xj_bridge'] = item.xj_bridge;
+                contents['task_desc'] = item.task_desc;
+                sql = util.format(sql, item.task_name, JSON.stringify(contents), new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 2, 0, 0, item.dept);
+                sql_pool.push(sql);
+                    //console.log(sql);
 
     })
-            callback(null, 'yh');
+                callback(null, 'yh');
 
             });
 
 
 
         },
-        xj:function(callback){
-            sqlexec(sql_yh, function(err, rowCount, row) {
+        xj:function(callback_s){
+
+            sqlexec(sql_xj, function(err, rowCount, row) {
                 async.each(row, function (item, callback) {
                     var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
                     var contents = {};
                     //获取巡检桥梁接口GetExaminePlanTaskById(string user_name, string validated_info, string taskID)
                     //http:/service_host/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=xxxx&validated_info=xxxx&taskID=xxxx
                     var req = "http://%s/InspectionService/ExamineService.svc/GetExaminePlanTaskById?user_name=not_in_use&validated_info=not_in_use&taskID=%s";
-                    var req = util.format(req, settings.service_host, item.TaskID);
-
+                    var req = util.format(req, settings.service_api_host, item.TaskID);
+                    //console.log(req);
                     request(req, function (error, response, body) {
                         if (!error && response.statusCode == 200) {
+                            //the request may return null, original api issue. So skip these task since no bridge
+                            if(body!='') {
 
-                            contents['task_name'] = item.task_name;
-                            contents['start_time'] = item.start_time;
-                            contents['end_time'] = item.end_time;
-                           //body item???
-                            contents['xj_bridge'] = JSON.parse(body).BridgeName;
-                            contents['task_desc'] = item.task_desc;
-                            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 1, 0, 0, item.dept);
-                            sql_pool.push(sql);
-                            callback();
+                                contents['task_name'] = item.task_name;
+                                contents['start_time'] = new Date(item.start_time).Format("yyyy-MM-dd hh:mm:ss");
+                                contents['end_time'] = new Date(item.end_time).Format("yyyy-MM-dd hh:mm:ss");
+                                contents['xj_bridge'] = JSON.parse(body).BridgeName;
+                                contents['task_desc'] = item.task_desc;
+                                sql = util.format(sql, item.task_name, JSON.stringify(contents), new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 1, 0, 0, item.dept);
+                                sql_pool.push(sql);
+                                //console.log(sql);
+                            }callback();
 
                         }
                     })
+                },function(err){
+                    callback_s(null, 'xj');
+
                 })
             })},
-        wx:function(callback){
-            sqlexec(sql_yh, function(err, rowCount, row) {
+        wx:function(callback_s){
+
+            console.log(sql_wx);
+            sqlexec(sql_wx, function(err, rowCount, row) {
                 async.each(row, function (item, callback) {
                     var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg, push_group) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
                     var contents = {};
@@ -489,23 +498,31 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
                     //GetBridgeComponentDamageAndMeasureListByMaintainTaskID?MaintainTaskID=30&user_name=admin&validated_info=qswdIM10wuHHvllXl9aUXDwGLD8DiYCqMmVsxCRLNZg%3d&page=1&rows=10&_=1456390570981
                     var req = "http://%s/InspectionService/RepairService.svc/GetBridgeComponentDamageAndMeasureListByMaintainTaskID?" +
                         "MaintainTaskID=%s&user_name=admin&validated_info=qswdIM10wuHHvllXl9aUXDwGLD8DiYCqMmVsxCRLNZg%3d&page=1&rows=10&_=1456390570981";
-                    var req = util.format(req, settings.service_host, item.MaintainTaskID);
+                    var req = util.format(req, settings.service_api_host, item.MaintainTaskID);
 
                     request(req, function (error, response, body) {
                         if (!error && response.statusCode == 200) {
 
-                            contents['task_name'] = item.task_name;
-                            contents['start_time'] = item.start_time;
-                            contents['end_time'] = item.end_time;
-                    //返回的所有bridge name 都是一样的，这里默认取了第一个
-                            contents['xj_bridge'] = JSON.parse(body).rows[0].BridgeName;
-                            contents['task_desc'] = item.task_desc;
-                            sql = util.format(sql, item.task_name, contents, new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 3, 0, 0, item.dept);
-                            sql_pool.push(sql);
+                            if(JSON.parse(body).total!=0) {
+                                contents['task_name'] = item.task_name;
+                                contents['start_time'] = new Date(item.start_time).Format("yyyy-MM-dd hh:mm:ss");
+                                contents['end_time'] = new Date(item.end_time).Format("yyyy-MM-dd hh:mm:ss");
+                                //返回的所有bridge name 都是一样的，这里默认取了第一个
+                                // the request may return null, original api issue. So skip these task since no bridge
+
+                                contents['xj_bridge'] = JSON.parse(body).rows[0].BridgeName;
+                                contents['task_desc'] = item.task_desc;
+                                sql = util.format(sql, item.task_name, JSON.stringify(contents), new Date(item.create_time).Format("yyyy-MM-dd hh:mm:ss"), 3, 0, 0, item.dept);
+                                sql_pool.push(sql);
+                            }
                             callback();
 
                         }
                     })
+                },function(err){
+
+                    callback_s(null, 'wx')
+
                 })
             })
         }
@@ -514,13 +531,29 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
 
     },function(err, results){
 
+        console.log('sql pool '+sql_pool);
+
         //对于sql_pool里的每一项，执行sql语句
 
-        callback_auto(null, sql_pool);
+       // callback_auto(null, sql_pool);
+
+        async.each(sql_pool, function(item, callback){
+
+            console.log(item);
+
+            sqlexec(item, function(err, rowCount, row){
+
+                callback()
+            })
+
+        },function(err){
+
+            callback_auto(null, 'done');
+
+
+        })
 
     })
-
-
 
 }
 
@@ -528,15 +561,21 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
 test function
 */
 
-var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
-        "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
-        "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
 
-auto_push(sql_yh, null, null, function(err, sql_pool){
+var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_bridge, a.ExecutionGroup as dept from " +
+    "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
+    "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
+///维修任务 - a任务名称，b任务开始时间，c任务结束时间，d维修/巡检桥梁，e任务描述
+var sql_wx = "select MaintainTaskMadeTime as create_time, MaintainTaskID, MaintainTaskName as task_name, ExpectBeginTime start_time, ExpectEndTime as end_time, MaintainTaskDes as task_desc, ExecuteWorkGroup as dept" +
+    " from [BMSInspection].[dbo].[Bridge_MaintainTask]";
+//巡检任务包含：a 任务名称，b任务开始时间，c任务结束时间，d 巡检桥梁 e 巡检类型 f 任务描述 -no type(e) here, need to be added once confirmed
+var sql_xj = "select a.TaskID, b.MakeTime as create_time, a.TaskID, b.PlanName as task_name, a.TaskStartTime  as start_time, a.TaskEndTime as end_time, b.PlanContent as task_desc, TaskExeGroup as dept " +
+    "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b " +
+    "where a.PlanID=b.PlanID";
 
-    console.log(sql_pool);
+auto_push(sql_yh, sql_wx, sql_xj, function(err, sql_status){
 
-
+    console.log(sql_status);
 
 })
 

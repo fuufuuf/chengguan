@@ -34,8 +34,8 @@ function push_opt_1(pd){
 
 
     this.headers={
-        'X-LC-Id': 'Qz9XjVHbt2U2aMlAtPUQ67Lw-gzGzoHsz',
-        'X-LC-Key': 'TrE9eOtAJjb9wkrubjFjzJJR',
+        'X-LC-Id': settings.push_id,
+        'X-LC-Key': settings.push_key,
         'Content-Type': 'application/json'};
     this.url= 'https://api.leancloud.cn/1.1/push';
     this.body={
@@ -120,8 +120,8 @@ var get_user = function(callback_2) {
 
     var r = {};
     r.headers={
-        'X-LC-Id': 'Qz9XjVHbt2U2aMlAtPUQ67Lw-gzGzoHsz',
-        'X-LC-Key': 'TrE9eOtAJjb9wkrubjFjzJJR'};
+        'X-LC-Id': settings.push_id,
+        'X-LC-Key': settings.push_key};
     r.url= 'https://api.leancloud.cn/1.1/installations';
 
     request(r, function(error, response, body){
