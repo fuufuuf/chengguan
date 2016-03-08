@@ -2,7 +2,7 @@ var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var async = require('async');
 var util = require('util');
-var requet = require('request');
+var request = require('request');
 var settings = require('../settings');
 
 var config = {
