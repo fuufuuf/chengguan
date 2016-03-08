@@ -1120,8 +1120,8 @@ function Run_task_develop(){
         "where a.PlanID=b.PlanID";
 
 
-    sqlcon.auto_push(sql_yh, sql_wx, sql_xj, function(err, sql_pool))
-
+    sqlcon.auto_push(sql_yh, sql_wx, sql_xj, function(err, sql_pool)
+/*
     sql_exec.push(req.body, function(err, row){
 
         mobile_push.push(row.get_result_for_push, function(result){
@@ -1130,7 +1130,7 @@ function Run_task_develop(){
 
         })
     })
-
+*/
         
 }
 
