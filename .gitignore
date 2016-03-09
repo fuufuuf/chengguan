@@ -29,8 +29,5 @@ build/Release
 /public/editor/html/*.html
 settings.js
 .idea/workspace.xml
-<<<<<<< HEAD
-.idea/workspace.xml
-=======
 modules/test.js
->>>>>>> origin/master
+public/cg_imgs/*.pdf

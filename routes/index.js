@@ -407,7 +407,8 @@ router.post('/editor', function(req, res, next) {
         console.log(fields);
 
         //生成Html,位置在public/editor/html/目录下
-        fs.writeFileSync(path.join('__dirname','..','public','editor','html',fields.title+'.html'), fields.editorValue);
+        console.log(__dirname);
+        fs.writeFileSync(path.join(__dirname,'..','public','editor','html',fields.title+'.html'), fields.editorValue);
         //保存附件
         for(item in files){
 
@@ -496,8 +497,8 @@ router.post('/push', function(req, res, next) {
     var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
     req.body.t = date;
      sql_exec.push(req.body, function(err, row){
-
-         mobile_push.push(row.get_result_for_push, function(result){
+//因为按照主键查询，数组只返回一项
+         mobile_push.push(row.get_result_for_push[0], function(result){
 
              res.json({status:'推送成功'});
 
@@ -668,8 +669,17 @@ router.get('/push_view', function(req, res, next) {
 
             var typec = push_n2c(row[0].type);
             var p = url.parse(row[0].contents).path;
+//加入附件预览的功能
+            var sj = JSON.parse(row[0].rep_attach);//解析成json
+            var attach = '';
 
-            res.render('inner.ejs',{c:row[0], type:row[0].type, typec:typec, url:p});
+            for(k in sj){
+
+                attach = 'http://'+sj[k];//原地址加上http://，这样href才能跳转
+
+            };
+
+            res.render('inner.ejs',{c:row[0], type:row[0].type, typec:typec, url:p, attach:attach});
 
 
 
@@ -1101,7 +1111,7 @@ c = new Date();//current time
 c_8 = new Date(c.Format("yyyy-MM-dd hh:mm:ss").split(' ')[0]+' 08:00:00');//8am current day
 n_8 = new Date(c_8.getTime()+86400000);//8am next day
 
-function Run_task_develop(){
+function Run_task(){
 
     console.log('Pushing task ', new Date());
 
@@ -1119,26 +1129,41 @@ function Run_task_develop(){
         "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b " +
         "where a.PlanID=b.PlanID";
 
-        
+
+    sql_exec.auto_push(sql_yh, sql_wx, sql_xj, function(rowCount, row){
 
 
-/*
-    sql_exec.push(req.body, function(err, row){
+        async.each(row, function(item, callback){
 
-        mobile_push.push(row.get_result_for_push, function(result){
+            console.log(item);
 
-            res.json({status:'推送成功'});
+            mobile_push.push(item, function(result){
+
+                callback();
+
+            })
+
+
+
+        }, function(err){
+
+            //推送完成后更新自动推送列为1
+
+            var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
+
+            var sql = "update [BMSInspection].[dbo].[CG_push] set auto_push=1 where auto_push=0";
+            sql_exec.sqlexec(sql, function (err, rowCount, row) {
+                console.log('auto push done');
+
+            });
+
 
         })
+
+
     })
-*/
+
         
-}
-
-function Run_task(){
-
-
-    
 }
 
 if(c.getHours()<8){
