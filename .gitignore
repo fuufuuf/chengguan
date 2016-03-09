@@ -29,3 +29,4 @@ build/Release
 /public/editor/html/*.html
 settings.js
 .idea/workspace.xml
+modules/test.js

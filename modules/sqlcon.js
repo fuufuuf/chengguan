@@ -543,7 +543,7 @@ var auto_push = function(sql_yh, sql_wx, sql_xj, callback_auto){
 
             sqlexec(item, function(err, rowCount, row){
 
-                callback()
+                callback();
             })
 
         },function(err){

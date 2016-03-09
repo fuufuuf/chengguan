@@ -1119,6 +1119,8 @@ function Run_task_develop(){
         "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b " +
         "where a.PlanID=b.PlanID";
 
+        
+
 
 /*
     sql_exec.push(req.body, function(err, row){
