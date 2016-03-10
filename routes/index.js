@@ -1107,6 +1107,19 @@ function Run_task(){
 
     //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
 
+//    var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg) values('%s', '%s', '%s', '%s', '%s', '%s')";
+//    var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
+////always set zhcg=0
+//    sql = util.format(sql, req.body.task_name, JSON.stringify(req.body), date, req.query.type,0, 0);
+//    sql_exec.sqlexec(sql, function (err, rowCount, row) {
+//
+//        var t = {total: rowCount, rows: row};
+//        console.log(t);
+//
+//        res.json({status: PUSH_STATUS_PASS});
+//
+//    });
+
     var sql_yh = "select a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
         "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
         "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
