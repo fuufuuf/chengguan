@@ -139,3 +139,5 @@ status -
 养护任务编辑器
 
 /taskeditor?type=3
+
+对于自动推送，在CG_push表中加入auto_push一项，第一次写入该项为0，当推送完成后，统一改成1

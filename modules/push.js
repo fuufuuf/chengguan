@@ -34,8 +34,8 @@ function push_opt_1(pd){
 
 
     this.headers={
-        'X-LC-Id': 'Qz9XjVHbt2U2aMlAtPUQ67Lw-gzGzoHsz',
-        'X-LC-Key': 'TrE9eOtAJjb9wkrubjFjzJJR',
+        'X-LC-Id': settings.push_id,
+        'X-LC-Key': settings.push_key,
         'Content-Type': 'application/json'};
     this.url= 'https://api.leancloud.cn/1.1/push';
     this.body={
@@ -57,31 +57,31 @@ var push = function(pd, callback_1) {
     /*pd has 3 parameters - data, title, channel[]*/
     //console.log('alert', pd[0]);
 
-    switch (pd[0].type)
+    switch (pd.type)
     {
         case '0':
-            pd[0].type_c="您有一条新的图文消息";
+            pd.type_c="您有一条新的图文消息";
             break;
         case '1':
-            pd[0].type_c="您有一条新的巡检消息";
+            pd.type_c="您有一条新的巡检消息";
             break;
         case '2':
-            pd[0].type_c="您有一条新的养护消息";
+            pd.type_c="您有一条新的养护消息";
             break;
         case '3':
-            pd[0].type_c="您有一条新的维修消息";
+            pd.type_c="您有一条新的维修消息";
             break;
         case '4':
-            pd[0].type_c="您有一条新的预警消息";
+            pd.type_c="您有一条新的预警消息";
             break;
         case '5':
-            pd[0].type_c="您有一条新的报告消息";
+            pd.type_c="您有一条新的报告消息";
             break;
     }
 
 //需要推送2次，因此创建两个推送parameter
-    var p = new push_opt_0(pd[0]);
-    var p1 = new push_opt_1(pd[0]);
+    var p = new push_opt_0(pd);
+    var p1 = new push_opt_1(pd);
 
     console.log(p);
 
@@ -120,8 +120,8 @@ var get_user = function(callback_2) {
 
     var r = {};
     r.headers={
-        'X-LC-Id': 'Qz9XjVHbt2U2aMlAtPUQ67Lw-gzGzoHsz',
-        'X-LC-Key': 'TrE9eOtAJjb9wkrubjFjzJJR'};
+        'X-LC-Id': settings.push_id,
+        'X-LC-Key': settings.push_key};
     r.url= 'https://api.leancloud.cn/1.1/installations';
 
     request(r, function(error, response, body){

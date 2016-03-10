@@ -55,6 +55,26 @@ var PUSH_STATUS_PASS = '编辑成功！请到推送管理界面进行推送';
 
 // });
 
+Date.prototype.Format = function(fmt)
+{
+    var o = {
+        "M+" : this.getMonth()+1,                 //
+        "d+" : this.getDate(),                    //
+        "h+" : this.getHours(),                   //
+        "m+" : this.getMinutes(),                 //
+        "s+" : this.getSeconds(),                 //
+        "q+" : Math.floor((this.getMonth()+3)/3), //
+        "S"  : this.getMilliseconds()             //
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
+
+
 router.get('/new_layout', function(req, res, next){
 
   res.render('new_layout');
@@ -387,7 +407,8 @@ router.post('/editor', function(req, res, next) {
         console.log(fields);
 
         //生成Html,位置在public/editor/html/目录下
-        fs.writeFileSync(path.join('__dirname','..','public','editor','html',fields.title+'.html'), fields.editorValue);
+        console.log(__dirname);
+        fs.writeFileSync(path.join(__dirname,'..','public','editor','html',fields.title+'.html'), fields.editorValue);
         //保存附件
         for(item in files){
 
@@ -476,8 +497,8 @@ router.post('/push', function(req, res, next) {
     var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
     req.body.t = date;
      sql_exec.push(req.body, function(err, row){
-
-         mobile_push.push(row.get_result_for_push, function(result){
+//因为按照主键查询，数组只返回一项
+         mobile_push.push(row.get_result_for_push[0], function(result){
 
              res.json({status:'推送成功'});
 
@@ -648,8 +669,17 @@ router.get('/push_view', function(req, res, next) {
 
             var typec = push_n2c(row[0].type);
             var p = url.parse(row[0].contents).path;
+//加入附件预览的功能
+            var sj = JSON.parse(row[0].rep_attach);//解析成json
+            var attach = '';
 
-            res.render('inner.ejs',{c:row[0], type:row[0].type, typec:typec, url:p});
+            for(k in sj){
+
+                attach = 'http://'+sj[k];//原地址加上http://，这样href才能跳转
+
+            };
+
+            res.render('inner.ejs',{c:row[0], type:row[0].type, typec:typec, url:p, attach:attach});
 
 
 
@@ -971,26 +1001,6 @@ router.get('/getGroupMems', function(req, res, next) {
 })
 
 
-Date.prototype.Format = function(fmt)
-{
-    var o = {
-        "M+" : this.getMonth()+1,                 //
-        "d+" : this.getDate(),                    //
-        "h+" : this.getHours(),                   //
-        "m+" : this.getMinutes(),                 //
-        "s+" : this.getSeconds(),                 //
-        "q+" : Math.floor((this.getMonth()+3)/3), //
-        "S"  : this.getMilliseconds()             //
-    };
-    if(/(y+)/.test(fmt))
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-    for(var k in o)
-        if(new RegExp("("+ k +")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-    return fmt;
-}
-
-
 function push_n2c(n){
     var x;
 
@@ -1105,33 +1115,52 @@ function Run_task(){
 
     console.log('Pushing task ', new Date());
 
-    //养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修桥梁，e任务描述
 
-//    var sql = "insert into BMSInspection.dbo.CG_push(title, contents, create_time, type, status, zhcg) values('%s', '%s', '%s', '%s', '%s', '%s')";
-//    var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-////always set zhcg=0
-//    sql = util.format(sql, req.body.task_name, JSON.stringify(req.body), date, req.query.type,0, 0);
-//    sql_exec.sqlexec(sql, function (err, rowCount, row) {
-//
-//        var t = {total: rowCount, rows: row};
-//        console.log(t);
-//
-//        res.json({status: PUSH_STATUS_PASS});
-//
-//    });
+    ///养护任务 - a任务名称，b任务开始时间，c任务结束时间，d维修/巡检桥梁，e任务描述
 
-    var sql_yh = "select a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_name, a.ExecutionGroup as dept from " +
+    var sql_yh = "select a.TaskStartTime as create_time, a.TaskName as task_name, a.TaskStartTime as start_time, a.TaskEndTime as end_time, a.TaskDescription as task_desc, c.BridgeName as xj_bridge, a.ExecutionGroup as dept from " +
         "[BMSInspection].[dbo].[Bridge_ConserveTask] a, [BMSInspection].[dbo].[Bridge_ConserveMeasure] b, [BMSInspection].[dbo].[Bridge_Bridge] c " +
         "where a.TaskID=b.TaskID and b.BridgeID=c.BridgeID";
+///维修任务 - a任务名称，b任务开始时间，c任务结束时间，d维修/巡检桥梁，e任务描述
+    var sql_wx = "select MaintainTaskMadeTime as create_time, MaintainTaskID, MaintainTaskName as task_name, ExpectBeginTime start_time, ExpectEndTime as end_time, MaintainTaskDes as task_desc, ExecuteWorkGroup as dept" +
+        " from [BMSInspection].[dbo].[Bridge_MaintainTask]";
+//巡检任务包含：a 任务名称，b任务开始时间，c任务结束时间，d 巡检桥梁 e 巡检类型 f 任务描述 -no type(e) here, need to be added once confirmed
+    var sql_xj = "select a.TaskID, b.MakeTime as create_time, a.TaskID, b.PlanName as task_name, a.TaskStartTime  as start_time, a.TaskEndTime as end_time, b.PlanContent as task_desc, TaskExeGroup as dept " +
+        "from BMSInspection.dbo.Bridge_ExaminePlanTask a, BMSInspection.dbo.Bridge_ExaminePlan b " +
+        "where a.PlanID=b.PlanID";
 
 
-    sql_exec.push(req.body, function(err, row){
+    sql_exec.auto_push(sql_yh, sql_wx, sql_xj, function(rowCount, row){
 
-        mobile_push.push(row.get_result_for_push, function(result){
 
-            res.json({status:'推送成功'});
+        async.each(row, function(item, callback){
+
+            console.log(item);
+
+            mobile_push.push(item, function(result){
+
+                callback();
+
+            })
+
+
+
+        }, function(err){
+
+            //推送完成后更新自动推送列为1
+
+            var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
+
+            var sql = "update [BMSInspection].[dbo].[CG_push] set auto_push=1 where auto_push=0";
+            sql_exec.sqlexec(sql, function (err, rowCount, row) {
+                console.log('auto push done');
+
+            });
+
 
         })
+
+
     })
 
         
