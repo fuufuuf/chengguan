@@ -1166,6 +1166,8 @@ function Run_task(){
         
 }
 
+Run_task();
+
 if(c.getHours()<8){
     
     setInterval(function(){
