@@ -1166,7 +1166,11 @@ function Run_task(){
         
 }
 
+<<<<<<< HEAD
 Run_task();
+=======
+//Run_task();
+>>>>>>> origin/master
 
 if(c.getHours()<8){
     
