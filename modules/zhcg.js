@@ -39,15 +39,31 @@ var url = settings.zhcg_webservice_url;
 
 var zhcg_opt = function(func, opt, callback) {
 
-    soap.createClient(url, function(err, client) {
+    console.log(settings.zhcg_webservice_url);
+
+    soap.createClient(settings.zhcg_webservice_url, function(err, client) {
+
+        if (err) throw err;
 
 
         client.process({SPID:settings.zhcg_user,SPPWD:settings.zhcg_passwd,func:func,request:opt},function(err,res){
         if (err) throw err;
-
         callback(res);
     });
     })
 }
+
+
+//test only
+xml_req = fs.readFileSync('./request_test.xml', 'utf-8');
+
+
+
+zhcg_opt('taskFeedback', xml_req, function(results){
+
+    console.log(results);
+
+})
+
 
 exports.zhcg_opt = zhcg_opt;

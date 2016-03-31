@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <request>
-	<function name='TaskDispatch'/>
+<Request>
+	<function name='TaskFeedBack'/>
 	<params>
-		<TaskNum>250780</TaskNum>
-		<FindTime>2012-04-26 15:08:25</FindTime>
-		<EventSource>监督员上报</EventSource>
-		<EventType>事件</EventType>
-		<MainType>宣传广告</MainType>
-		<SubType>广告招牌破损</SubType>
-		<DistrictCode>区编码</ DistrictCode>
-		<DistrictName>区</DistrictName>
-		<StreetCode>街道编码</ StreetCode>
-		<StreetName>街道</StreetName>
-		<CommunityCode>社区编码</CommunityCode>
-		<CommunityName>社区</CommunityName>
-		<CoordinateX>2001</CoordinateX>
-		<CoordinateY>2002</CoordinateY>
-		<EventAddress>距离都市华城西南方向17米</EventAddress>
-		<EventDescription>任港路路南都市华城小区大门向里5米路东侧有…</EventDescription>
-		<EventPositionMap>http://localhost:3000/cg_imgs/map.jpg</EventPositionMap>
-		<SendTime>2012-04-26 15:20:44</SendTime>
-        <DealEndTime>2012-05-26 15:20:44</DealEndTime>
-		<SendMemo>该问题请城管局根据情况处理</SendMemo>
-		<DealTimeLimit>256.00</DealTimeLimit>
-		<DealUnit>50</DealUnit>
-	<EventPictures  num='1'>
-			<picture name='test1.jpg' url='http://localhost:3000/cg_imgs/m1.jpg'/>
-		</EventPictures>
-		<EventMedias  num='2'>
-            <media name='1003027204.wav' url='http://32.142.15.6/…/1_1_1003027204.wav '/>
-            <media name='100302720994.wav' url='http://32.142.15.6/…/1_1_1003027204.wav '/>
-		</EventMedias>
+		<TaskNum>15092403580</TaskNum>
+		<FeedbackDate> 2016-03-29 17:20:08</FeedbackDate>
+		<FeedbackMemo>该问题已经处理完毕</FeedbackMemo>
+		<FeedbackOpter>UnitID</FeedbackOpter>
+		<FeedbackPictures num='2'>
+			<picture name='201111280656.jpg' url='http://7xrc8m.com2.z0.glb.qiniucdn.com/%40%2Fgao%2Fsound1.png'/>
+			<picture name='201111280680.jpg' url='http://7xrc8m.com2.z0.glb.qiniucdn.com/%40%2Fgao%2Fvoice.png'/>
+		</FeedbackPictures>
 	</params>
-</request>
-
+</Request>
