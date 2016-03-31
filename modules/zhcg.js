@@ -55,15 +55,15 @@ var zhcg_opt = function(func, opt, callback) {
 
 
 //test only
-xml_req = fs.readFileSync('./request_test.xml', 'utf-8');
-
-
-
-zhcg_opt('taskFeedback', xml_req, function(results){
-
-    console.log(results);
-
-})
+//xml_req = fs.readFileSync('./request_test.xml', 'utf-8');
+//
+//
+//
+//zhcg_opt('taskFeedback', xml_req, function(results){
+//
+//    console.log(results);
+//
+//})
 
 
 exports.zhcg_opt = zhcg_opt;
