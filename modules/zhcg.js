@@ -1,7 +1,7 @@
 var fs = require('fs');
 var soap = require('soap');
 var settings = require('../settings');
-
+var path = require('path');
 var url = settings.zhcg_webservice_url;
 
 // soap.createClient(url, function(err, client) {
@@ -55,7 +55,7 @@ var zhcg_opt = function(func, opt, callback) {
 
 
 //test only
-xml_req = fs.readFileSync('./request_test.xml', 'utf-8');
+xml_req = fs.readFileSync(path.join(__dirname,'request_test.xml'), 'utf-8');
 
 
 

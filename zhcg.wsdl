@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="wsdltest"
-                  targetNamespace="http://localhost:8000/wsdltest"
+                  targetNamespace="http://localhost:8004/wsdltest"
                   xmlns="http://localhost:8000/wsdltest"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
@@ -16,36 +16,10 @@
 	<wsdl:message name="ProcessOutput">
         <wsdl:part name="request" type="xs:string"/>
     </wsdl:message>
-	
-	<wsdl:message name="sumarRequest">
-        <wsdl:part name="a" type="xs:string"/>
-        <wsdl:part name="b" type="xs:string"/>
-    </wsdl:message>
-
-    <wsdl:message name="multiplicarRequest">
-        <wsdl:part name="a" type="xs:string"/>
-        <wsdl:part name="b" type="xs:string"/>
-    </wsdl:message>
-
-    <wsdl:message name="multiplicarResponse">
-        <wsdl:part name="res" type="xs:string"/>
-    </wsdl:message>
-    <wsdl:message name="sumarResponse">
-        <wsdl:part name="res" type="xs:string"/>
-    </wsdl:message>
 
 
-    <wsdl:portType name="calcP">
-        <wsdl:operation name="sumar">
-            <wsdl:input message="sumarRequest"/>
-            <wsdl:output message="sumarResponse"/>
-        </wsdl:operation>
+    <wsdl:portType name="zjcgp">
 
-        <wsdl:operation name="multiplicar">
-            <wsdl:input message="multiplicarRequest"/>
-            <wsdl:output message="multiplicarResponse"/>
-        </wsdl:operation>
-		
 		<wsdl:operation name="process">
             <wsdl:input message="ProcessInput"/>
             <wsdl:output message="ProcessOutput"/>
@@ -53,7 +27,7 @@
 
     </wsdl:portType>
 
-    <wsdl:binding name="calcB" type="calcP">
+    <wsdl:binding name="zjcgb" type="zjcgp">
         <soap:binding style="rpc"
                       transport="http://schemas.xmlsoap.org/soap/http"/>
 
@@ -68,34 +42,11 @@
                            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
             </wsdl:output>
         </wsdl:operation>
-					  
-        <wsdl:operation name="sumar">
-            <soap:operation soapAction="sumar"/>
-            <wsdl:input>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:output>
-        </wsdl:operation>
 
-        <wsdl:operation name="multiplicar">
-            <soap:operation soapAction="multiplicar"/>
-            <wsdl:input>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:output>
-        </wsdl:operation>
     </wsdl:binding>
 
     <wsdl:service name="ws">
-        <wsdl:port name="zj_zhcg" binding="calcB">
+        <wsdl:port name="zj_zhcg" binding="zjcgb">
             <soap:address location="http://localhost:8004/wsdltest"/>
         </wsdl:port>
     </wsdl:service>
