@@ -44,15 +44,6 @@ var soap_service = {
 
                 });
 
-            },
-            sumar : function(args) {
-                var n = args.a + args.b;
-                return { res : n };
-            },
-
-            multiplicar : function(args) {
-                var n = args.a * args.b;
-                return { res : n }
             }
         }
     }
