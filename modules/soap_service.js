@@ -13,16 +13,17 @@ var soap_service = {
             process : function(args, callback){
 
 
+                var nr = args.request.replace(/&lt;/g,'<').replace(/&quot;/g,'\'').replace(/&gt;/g,'>');
 
-                parseString(args.request, { explicitArray : false, mergeAttrs: true }, function (err, result) {
+                parseString(nr, { explicitArray : false, mergeAttrs: true }, function (err, result) {
 
                     if(err) throw err;
-
+                    var params = result['soapenv:Envelope']['soapenv:Body']['process']['request']['Request']['params'];
 
                     if(args.func=='TaskDispatch'){
+                        console.log(s);
 
-
-                        Task_dispatch(result['request']['params'], function(r){
+                        Task_dispatch(params, function(r){
 
                             callback(r);
                         });
@@ -31,12 +32,10 @@ var soap_service = {
                     }else if(args.func=='ReplyAccredit'){
 
 
-                        ReplyAccredit(result['request']['params'], function(r){
+                        ReplyAccredit(params, function(r){
 
                             callback(r);
                         });
-
-
 
                     }
 

@@ -1,7 +1,10 @@
-
 var fs = require('fs');
-xml_req = fs.readFileSync('./request_test.xml', 'utf-8');
+var querystring = require('querystring');
+xml_req = fs.readFileSync('./rev.xml', 'utf-8');//taskdispatch
 
-n = xml_req.replace('\n','');
-t = xml_req.replace('\t','');
-console.log(n);
+console.log(xml_req);
+s=xml_req.replace(/&lt;/g,'<').replace(/&quot;/g,'\'').replace(/&gt;/g,'>');
+console.log(s);
+//console.log(querystring.unescape(xml_req));
+
+
