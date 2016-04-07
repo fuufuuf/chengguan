@@ -12,16 +12,14 @@ var soap_service = {
 
             process : function(args, callback){
 
-
-                var nr = args.request['$value'];
-                console.log(nr);
+                var nr = args.request['$value'].replace(/\/\'/g,'\'');
 
                 parseString(nr, { explicitArray : false, mergeAttrs: true }, function (err, result) {
 
                     if(err) throw err;
                     var params = result['Request']['params'];
 
-                    if(args.func=='TaskDispatch'){
+                    if(result['Request']['function']['name']=='TaskDispatch'){
                         console.log(s);
 
                         Task_dispatch(params, function(r){
@@ -30,8 +28,7 @@ var soap_service = {
                         });
 
 
-                    }else if(args.func=='ReplyAccredit'){
-
+                    }else if(result['Request']['function']['name']=='ReplyAccredit'){
 
                         ReplyAccredit(params, function(r){
 
