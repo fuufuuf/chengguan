@@ -13,12 +13,13 @@ var soap_service = {
             process : function(args, callback){
 
 
-                var nr = args.request.replace(/&lt;/g,'<').replace(/&quot;/g,'\'').replace(/&gt;/g,'>');
+                var nr = args.request['$value'];
+                console.log(nr);
 
                 parseString(nr, { explicitArray : false, mergeAttrs: true }, function (err, result) {
 
                     if(err) throw err;
-                    var params = result['soapenv:Envelope']['soapenv:Body']['process']['request']['Request']['params'];
+                    var params = result['Request']['params'];
 
                     if(args.func=='TaskDispatch'){
                         console.log(s);
