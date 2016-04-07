@@ -20,7 +20,7 @@ var soap_service = {
                     var params = result['Request']['params'];
 
                     if(result['Request']['function']['name']=='TaskDispatch'){
-                        console.log(s);
+                       // console.log(s);
 
                         Task_dispatch(params, function(r){
 
