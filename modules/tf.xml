@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+    <function name='TaskFeedBack'/>
+    <params>
+        <TaskNum>%s</TaskNum>
+        <FeedbackDate>%s</FeedbackDate>
+        <FeedbackMemo>%s</FeedbackMemo>
+        <FeedbackOpter>%s</FeedbackOpter>
+        <FeedbackPictures num='%s'>%s</FeedbackPictures>
+    </params>
+</Request>

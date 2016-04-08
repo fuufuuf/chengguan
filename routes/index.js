@@ -527,21 +527,23 @@ router.post('/reply_task', function(req, res, next) {
 
     var loc = {};
     var form = new formidable.IncomingForm();
+    var file_size = 0;
     form.encoding = 'utf-8';
     form.uploadDir = path.join(path.join(path.dirname(__dirname), 'public/cg_imgs'));
     form.keepExtensions = true;
 
     form.parse(req, function(err, fields, files) {
-        console.log(files);
+        //console.log(files);
 
         for(item in files){
 
             if(files[item].name!='') {
                 var new_path = path.join(form.uploadDir, files[item].name);
                 fs.renameSync(files[item].path, new_path);
-                console.log(new_path);
-                console.log('name', files[item].name);
+                //console.log(new_path);
+                //console.log('name', files[item].name);
                 loc[files[item].name] = new_path;
+                file_size++;
             }
 
         }
@@ -553,8 +555,32 @@ router.post('/reply_task', function(req, res, next) {
 
        sql_exec.status_update(fields.task_num, '04', sql, function(err){
 
+
+           var pic_info='';
+           var pf = "<picture name='%s' url='http://%s'/>";
+
+
            if(err) throw err;
-           res.end('操作成功');
+           var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tf.xml'), 'utf-8');//taskdispatch
+
+           if(file_size!=0){
+               for(name in loc){
+                   pic_info += util.format(pf, name, settings.service_host+ ':' +settings.service_port +'/cg_imgs/'+name);
+               }
+
+           }
+
+
+           var req_xml = util.format(xml_req, fields.task_num, date, fields.details, fields.person,file_size,pic_info);
+           zhcg.zhcg_opt('TaskFeedBack', req_xml, function(results){
+
+               console.log(results);
+               res.end('操作成功');
+
+           })
+
+
+
 
 
        });

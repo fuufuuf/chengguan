@@ -19,8 +19,8 @@ soap.createClient(url, function(err, client) {
     if (err) throw err;
 
 
-    xml_req = fs.readFileSync('./rev.xml', 'utf-8');//taskdispatch
-    xml_req_rollback = fs.readFileSync('./rollback.xml', 'utf-8');//taskdispatch
+    //xml_req = fs.readFileSync('./rev.xml', 'utf-8');//taskdispatch
+    xml_req_rollback = fs.readFileSync('./rollback.xml', 'utf-8');//rollback
     //xml_req_1 = fs.readFileSync('./request_reply_delay.xml', 'utf-8');
     //xml_req_2 = fs.readFileSync('./request_reply_hang.xml', 'utf-8');
     /*测试新建任务*/
