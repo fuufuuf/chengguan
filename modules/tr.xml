@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+    <function name='TaskRollBack'/>
+    <params>
+        <TaskNum>%s</TaskNum>
+        <RollbackOpter>%s</RollbackOpter>
+        <RollbackDate>%s</RollbackDate>
+        <RollbackMemo>%s</RollbackMemo>
+    </params>
+</Request>
+

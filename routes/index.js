@@ -4,7 +4,6 @@ var sql_exec = require('../modules/sqlcon');
 var mobile_push = require('../modules/push');
 var zhcg = require('../modules/zhcg');
 var async = require('async');
-var xml2js = require('xml2js');
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
@@ -223,6 +222,18 @@ router.post('/ApplyAccredit', function(req, res, next) {
     * 插入表CG_ApplyAccredit作为新的延期挂账申请*/
     sql_exec.status_update(req.query.TaskNum, '0'+req.query.type, sql, function(err){
 
+        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/td.xml'), 'utf-8');//task rollback
+
+        xml_req = util.format(xml_req, req.query.TaskNum, req.body.cgID, parseFloat(req.body.ApplyDelayInfo).toFixed(2), req.body.ApplyDate, req.body.ApplyMemo);
+
+        console.log(xml_req);
+
+        zhcg.zhcg_opt('ApplyAccredit', xml_req, function(result){//task delay
+            console.log(result);
+            if(err) res.end('err');
+            res.end('延期申请成功！');
+        })
+
         if(err) res.end('err');
 /*
 * not in use
@@ -258,12 +269,16 @@ router.post('/task_Rollback', function(req, res, next){
     var status = '03';
     var sql = "insert into BMSInspection.dbo.CG_TaskRollBack(TaskNum, RollbackOpter, RollbackDate, RollbackMemo) values('%s','%s','%s','%s')"
     sql = util.format(sql, req.body.taskNum, req.body.RollbackOpter, req.body.RollbackDate, req.body.RollbackMemo);
-    console.log(sql);
-    sql_exec.status_update(req.body.taskNum,status, sql, function(err, result){
-
-        if(err) res.end(err);
-        res.end('回退成功');
-
+   // console.log(sql);
+    sql_exec.status_update(req.body.taskNum, status, sql, function(err, result){
+        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tr.xml'), 'utf-8');//task rollback
+        xml_req = util.format(xml_req, req.body.taskNum, req.body.RollbackOpter, new Date().Format('yyyy-MM-dd hh:mm:ss'), req.body.RollbackMemo);
+        console.log(xml_req);
+        zhcg.zhcg_opt('TaskRollBack', xml_req, function(result){//task rollback
+            console.log(result);
+            if(err) res.end(err);
+            res.end('回退成功');
+        })
     })
 
 
@@ -305,7 +320,7 @@ router.get('/task_details', function(req, res, next) {
 
         console.log(data['task_img']);
 //media is not in use on task_detail.ejs
-        res.render('task_detail', {details:data['task'][0], img: data['task_img'], media:data['task_media'], web_source:web_source||'/'});
+        res.render('task_detail', {details:data['task'][0], img: data['task_img'], media:data['task_media'], web_source:web_source||'/get_task'});
 
     })
 
@@ -572,7 +587,7 @@ router.post('/reply_task', function(req, res, next) {
 
 
            var req_xml = util.format(xml_req, fields.task_num, date, fields.details, fields.person,file_size,pic_info);
-           zhcg.zhcg_opt('TaskFeedBack', req_xml, function(results){
+           zhcg.zhcg_opt('TaskFeedBack', req_xml, function(results){//send to zhcg web service
 
                console.log(results);
                res.end('操作成功');

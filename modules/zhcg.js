@@ -7,7 +7,7 @@ var url = settings.zhcg_webservice_url;
 
 
 
-var zhcg_opt = function(func, opt, callback) {
+var zhcg_opt = function(func, opt, callback) {//this is used to send request to zhcg, that includes taskfeedback, delay('ApplyAccredit') and rollback
 
     console.log(settings.zhcg_webservice_url);
 

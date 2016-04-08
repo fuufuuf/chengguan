@@ -9,6 +9,8 @@
             <li><a href="javascript:void(0)" onclick="showcontent('t1')">未办理任务</a></li>
             <li><a href="javascript:void(0)" onclick="showcontent('t2')">已办理任务</a></li>
             <li><a href="javascript:void(0)" onclick="showcontent('t3')">延期任务</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('t4')">回退任务</a></li>
+
 
         </ul>
     </div>
@@ -26,16 +28,19 @@
 function showcontent(t){
     switch(t)
     {
-    case 't1':
-        $('#new_url').attr("src", "/get_task");
-        break;
-    case 't2':
-        $('#new_url').attr("src", "/task_done");
-        break;
-    case 't3':
-        $('#new_url').attr("src", "/task_gzyq");
-        break;      
-    default:
+        case 't1':
+            $('#new_url').attr("src", "/get_task");
+            break;
+        case 't2':
+            $('#new_url').attr("src", "/task_done");
+            break;
+        case 't3':
+            $('#new_url').attr("src", "/task_gzyq");
+            break;
+        case 't4':
+            $('#new_url').attr("src", "/task_rollback");
+            break;
+        default:
         $('#new_url').attr("src", "/get_task");
         break;
 }
