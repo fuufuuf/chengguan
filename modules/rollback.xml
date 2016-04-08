@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+    <function name=' TaskRollBack'/>
+    <params>
+        <TaskNum>16040700003</TaskNum>
+        <RollbackOpter>UnitID</RollbackOpter>
+        <RollbackDate>2016-04-08 14:10:54</RollbackDate>
+        <RollbackMemo>不属于我部门负责，请重新派遣。test by Larry</RollbackMemo>
+    </params>
+</Request >
