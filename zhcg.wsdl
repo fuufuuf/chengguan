@@ -5,6 +5,7 @@
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
                   xmlns:xs="http://www.w3.org/2001/XMLSchema/"
+				  xmlns:undefined="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
 
     <wsdl:message name="ProcessInput">

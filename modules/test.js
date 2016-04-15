@@ -1,29 +1,14 @@
-var fs = require('fs');
-var util = require('util');
-var settings = require('../settings.js')
+var i = [{p:"{\"tsd\":1}", s:'2'},{p:'{'qq':343}', s:'666'}]
 
 
-var s = {img_1:'x1', img_2:'x2'}
+//i.forEach(function(item){
+//
+//    console.log(JSON.parse(item['p']));
+//
+//
+//})
 
-var t = "<picture name='%s' url='http://%s'/>";
-var s_start = "<FeedbackPictures num='%s'>"
-console.log(s.length);
-
-for(name in s){
-
-    console.log(util.format(t, name, settings.service_host+ ':' +settings.service_port +'/cg_imgs/'+name));
-}
-var s_end = "</FeedbackPictures>";
+var s = '{"ddd":2222}'
 
 
-var st;
-
-for (s in st){
-
-    console.log(s);
-
-}
-
-
-
-
+console.log(typeof JSON.parse(s))

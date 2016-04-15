@@ -950,8 +950,12 @@ router.get('/zhcg_get_warning', function(req, res, next) {
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
 
         var t = {total: rowCount, rows: row};
-        console.log(t);
 
+        row.forEach(function(item){
+            //console.log(JSON.parse[item['contents']])
+            item['contents'] = JSON.parse(item['contents']);
+
+        })
         res.json(row);
 
     });
