@@ -30,3 +30,4 @@ build/Release
 .idea/workspace.xml
 modules/test.js
 public/cg_imgs/*.pdf
+table_creation.zip

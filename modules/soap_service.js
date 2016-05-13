@@ -172,33 +172,3 @@ var ReplyAccredit = function(p, callback){
         })
     }
 };
-
-//check if the list value is not null...
-var Check_Null = function(NoNULL_LIST, p){
-
-    for (var key in p) {
-
-        var flag = 0;
-
-        for(i in NoNULL_LIST){
-
-            if(NoNULL_LIST[i] == key){
-
-                flag = 1;
-                break;
-
-            }
-
-        }
-
-        if(flag==0 && (p[key]==null||p[key]=='')){
-
-
-            return key;
-        }
-
-    }
-
-    return true;
-
-};

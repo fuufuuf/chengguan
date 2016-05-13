@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var wsdl = require('./routes/wsdl_test');
+
 var ueditor = require('ueditor');
 var app = express();
 
@@ -48,7 +50,8 @@ app.use("/lib/ueditor/ue", ueditor(path.join(__dirname, 'public'), function(req,
 app.use('/', routes);
 app.use('/users', users);
 app.use('/', routes);
-app.use('/users', users);
+app.use('/wsdltest', wsdl);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
