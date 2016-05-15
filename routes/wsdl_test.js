@@ -16,8 +16,9 @@ router.post('/wsdl', function(req, res, next){
 router.get('/wsdl', function(req, res, next){
 
 
-    var xml = require('fs').readFileSync(path.join(path.dirname(__dirname),'zhcg.wsdl'), 'utf8');
-    res.send('sssss');
+    var xml = require('fs').readFileSync(path.join(path.dirname(__dirname),'zhcg.wsdl'), 'utf8')
+    res.set('Content-Type','application/xml');
+    res.send(xml);
 
 });
 
