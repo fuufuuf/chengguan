@@ -31,3 +31,4 @@ build/Release
 modules/test.js
 public/cg_imgs/*.pdf
 table_creation.zip
+settings.js
