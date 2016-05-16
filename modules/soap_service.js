@@ -13,16 +13,6 @@ var soap_service = {
             process : function(args, callback) {
 
 
-                if (args.test) {
-
-                    console.log('this is a test');
-
-                    callback({result:"<x1>freedom</x1>"});
-
-                } else {
-
-                    console.log(args);
-
                     var nr = args.request['$value'].replace(/\/\'/g, '\'');
 
                     parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
@@ -51,7 +41,7 @@ var soap_service = {
 
                     });
 
-                }
+
             }
         }
     }
@@ -80,28 +70,6 @@ s.on('request', function(req, methodName){
 var Task_dispatch = function(p, callback){
 
 
-    //var NoNULL_LIST = ['EventPositionMap','SendTime','SendMemo','DealUnit', 'EventSource','EventPictures','EventMedias'];
-    //
-    //
-    ////pre_check记录了soap传来的参数是否有空值，如果有空值但是不在null_list里面，直接返回错误给soap服务器
-    //var pre_check = Check_Null(NoNULL_LIST, p);
-
-    var pre_check=true;//set always to true until pre_check function done
-
-
-    if(pre_check!=true){
-
-        var request_body = "<Request><ResultCode>1</ResultCode>"+
-            "<ResultDesc>%s 是空值，不符合规范，请重新发起请求</ResultDesc>"+
-            "<ResultMemo>TaskDispatch</ResultMemo></Request>";
-
-
-        request_body = util.format(request_body, pre_check);
-
-        callback ({result:request_body});
-
-    }
-    else{
         sql_exec.task_dispatch(p, function(err, res){
 
             if (err) {
@@ -112,14 +80,11 @@ var Task_dispatch = function(p, callback){
 
                 callback({result:res});
 
-            };
-
-
-
+            }
 
         })
 
-    }
+
 
 
 };
@@ -128,28 +93,6 @@ var Task_dispatch = function(p, callback){
 var ReplyAccredit = function(p, callback){
 
 
-    //var NoNULL_LIST = ['EventPositionMap','SendTime','SendMemo','DealUnit', 'EventSource','EventPictures','EventMedias'];
-    //
-    //
-    ////pre_check记录了soap传来的参数是否有空值，如果有空值但是不在null_list里面，直接返回错误给soap服务器
-    //var pre_check = Check_Null(NoNULL_LIST, p);
-
-    var pre_check=true;//set always to true until pre_check function done
-
-
-    if(pre_check!=true){
-
-        var request_body = "<Request><ResultCode>1</ResultCode>"+
-            "<ResultDesc>%s 是空值，不符合规范，请重新发起请求</ResultDesc>"+
-            "<ResultMemo>TaskDispatch</ResultMemo></Request>";
-
-
-        request_body = util.format(request_body, pre_check);
-
-        callback ({result:request_body});
-
-    }
-    else{
         var sql = "update BMSInspection.dbo.CG_ApplyAccredit set ReplyDate='%s', ReplyCode='%s', ReplyInfo='%s', ReplyMemo='%s' where " +
             "TaskNum='%s'";
 
@@ -181,5 +124,5 @@ var ReplyAccredit = function(p, callback){
             }
 
         })
-    }
+
 };
