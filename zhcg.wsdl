@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="wsdltest"
-                  targetNamespace="http://localhost:8004/wsdltest"
-                  xmlns="http://localhost:8000/wsdltest"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema/"
-				  xmlns:undefined="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<definitions name="wsdltest"
+             targetNamespace="http://localhost:8004/wsdltest"
+             xmlns="http://localhost:8000/wsdltest"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
 
-    <wsdl:message name="ProcessInput">
-        <wsdl:part name="SPID" type="xs:string"/>
-        <wsdl:part name="SPPWD" type="xs:string"/>
-		<wsdl:part name="func" type="xs:string"/>
-        <wsdl:part name="request" type="xs:string"/>
-    </wsdl:message>
-	<wsdl:message name="ProcessOutput">
-        <wsdl:part name="request" type="xs:string"/>
-    </wsdl:message>
+    <message name="ProcessInput">
+        <part name="SPID" type="xsd:string"/>
+        <part name="SPPWD" type="xsd:string"/>
+		<part name="func" type="xsd:string"/>
+        <part name="request" type="xsd:string"/>
+    </message>
+	<message name="ProcessOutput">
+        <part name="result" type="xsd:string"/>
+    </message>
 
 
-    <wsdl:portType name="zjcgp">
+    <portType name="zjcgp">
 
-		<wsdl:operation name="process">
-            <wsdl:input message="ProcessInput"/>
-            <wsdl:output message="ProcessOutput"/>
-        </wsdl:operation>
+		<operation name="process">
+            <input message="ProcessInput"/>
+            <output message="ProcessOutput"/>
+        </operation>
 
-    </wsdl:portType>
+    </portType>
 
-    <wsdl:binding name="zjcgb" type="zjcgp">
+    <binding name="zjcgb" type="zjcgp">
         <soap:binding style="rpc"
                       transport="http://schemas.xmlsoap.org/soap/http"/>
 
-		<wsdl:operation name="process">
+		<operation name="process">
             <soap:operation soapAction="process"/>
-            <wsdl:input>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"
-                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-            </wsdl:output>
-        </wsdl:operation>
+            <input>
+                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
 
-    </wsdl:binding>
+    </binding>
 
-    <wsdl:service name="ws">
-        <wsdl:port name="zj_zhcg" binding="zjcgb">
+    <service name="ws">
+        <port name="zj_zhcg" binding="zjcgb">
             <soap:address location="http://localhost:8004/wsdltest"/>
-        </wsdl:port>
-    </wsdl:service>
-</wsdl:definitions>
+        </port>
+    </service>
+</definitions>

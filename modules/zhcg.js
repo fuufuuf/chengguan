@@ -2,16 +2,13 @@ var fs = require('fs');
 var soap = require('soap');
 var settings = require('../settings');
 var path = require('path');
-var url = settings.zhcg_webservice_url;
-var url = 'http://101.200.174.136:8888/wsdltest/wsdl?wsdl'
 var fs = require('fs');
 
 
 var zhcg_opt = function(func, opt, callback) {//this is used to send request to zhcg, that includes taskfeedback, delay('ApplyAccredit') and rollback
 
-    console.log(url);
 
-    soap.createClient(url, function(err, client) {
+    soap.createClient(settings.zhcg_webservice_url, function(err, client) {
 
         if (err) throw err;
 

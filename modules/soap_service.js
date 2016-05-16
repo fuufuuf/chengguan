@@ -10,41 +10,48 @@ var soap_service = {
     ws: {
         zj_zhcg: {
 
-            process : function(args, callback){
-
-                console.log(args);
-
-               // args.request = args.request||''
-
-                var nr = args.request['$value'].replace(/\/\'/g,'\'');
-
-                parseString(nr, { explicitArray : false, mergeAttrs: true }, function (err, result) {
-
-                    if(err) throw err;
-                    var params = result['Request']['params'];
-
-                    if(result['Request']['function']['name']=='TaskDispatch'){
-                       // console.log(s);
-
-                        Task_dispatch(params, function(r){
-
-                            callback(r);
-                        });
+            process : function(args, callback) {
 
 
-                    }else if(result['Request']['function']['name']=='ReplyAccredit'){
+                if (args.test) {
 
-                        ReplyAccredit(params, function(r){
+                    console.log('this is a test');
 
-                            callback(r);
-                        });
+                    callback({result:"<x1>freedom</x1>"});
 
-                    }
+                } else {
+
+                    console.log(args);
+
+                    var nr = args.request['$value'].replace(/\/\'/g, '\'');
+
+                    parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
+
+                        if (err) throw err;
+                        var params = result['Request']['params'];
+
+                        if (result['Request']['function']['name'] == 'TaskDispatch') {
+                            // console.log(s);
+
+                            Task_dispatch(params, function (r) {
+
+                                callback(r);
+                            });
 
 
+                        } else if (result['Request']['function']['name'] == 'ReplyAccredit') {
 
-                });
+                            ReplyAccredit(params, function (r) {
 
+                                callback(r);
+                            });
+
+                        }
+
+
+                    });
+
+                }
             }
         }
     }
@@ -84,14 +91,14 @@ var Task_dispatch = function(p, callback){
 
     if(pre_check!=true){
 
-        var request_body = "<ResultCode>1</ResultCode>"+
+        var request_body = "<Request><ResultCode>1</ResultCode>"+
             "<ResultDesc>%s 是空值，不符合规范，请重新发起请求</ResultDesc>"+
-            "<ResultMemo>TaskDispatch</ResultMemo>";
+            "<ResultMemo>TaskDispatch</ResultMemo></Request>";
 
 
         request_body = util.format(request_body, pre_check);
 
-        callback ({request:request_body});
+        callback ({result:request_body});
 
     }
     else{
@@ -99,11 +106,11 @@ var Task_dispatch = function(p, callback){
 
             if (err) {
 
-                callback({request: err});
+                callback({result: err});
             }
             else{
 
-                callback({request:res});
+                callback({result:res});
 
             };
 
@@ -132,14 +139,14 @@ var ReplyAccredit = function(p, callback){
 
     if(pre_check!=true){
 
-        var request_body = "<ResultCode>1</ResultCode>"+
+        var request_body = "<Request><ResultCode>1</ResultCode>"+
             "<ResultDesc>%s 是空值，不符合规范，请重新发起请求</ResultDesc>"+
-            "<ResultMemo>TaskDispatch</ResultMemo>";
+            "<ResultMemo>TaskDispatch</ResultMemo></Request>";
 
 
         request_body = util.format(request_body, pre_check);
 
-        callback ({request:request_body});
+        callback ({result:request_body});
 
     }
     else{
@@ -156,21 +163,21 @@ var ReplyAccredit = function(p, callback){
             if (err){
 
 
-                var request_body = "<ResultCode>1</ResultCode>"+
+                var request_body = "<Request><ResultCode>1</ResultCode>"+
                     "<ResultDesc>err</ResultDesc>"+
-                    "<ResultMemo>ApplyAccredit</ResultMemo>";
+                    "<ResultMemo>ApplyAccredit</ResultMemo></Request>";
 
-                callback ({request:request_body});
+                callback ({result:request_body});
 
 
             }else{
 
 
-                var request_body = "<ResultCode>0</ResultCode>"+
+                var request_body = "<Request><ResultCode>0</ResultCode>"+
                     "<ResultDesc>saved successed</ResultDesc>"+
-                    "<ResultMemo>ApplyAccredit</ResultMemo>";
+                    "<ResultMemo>ApplyAccredit</ResultMemo></Request>";
 
-                callback ({request:request_body});
+                callback ({result:request_body});
             }
 
         })
