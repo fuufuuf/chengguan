@@ -2,14 +2,11 @@ var fs = require('fs');
 var soap = require('soap');
 var settings = require('../settings');
 var path = require('path');
-var url = settings.zhcg_webservice_url;
-//var url = 'http://localhost:8004/wsdltest?wsdl'
-
+var fs = require('fs');
 
 
 var zhcg_opt = function(func, opt, callback) {//this is used to send request to zhcg, that includes taskfeedback, delay('ApplyAccredit') and rollback
 
-    console.log(settings.zhcg_webservice_url);
 
     soap.createClient(settings.zhcg_webservice_url, function(err, client) {
 
@@ -22,5 +19,11 @@ var zhcg_opt = function(func, opt, callback) {//this is used to send request to 
     })
 }
 
+//var xml = fs.readFileSync('../modules/request_test.xml');
+//
+//zhcg_opt('test_func',xml, function(res){
+//
+//    console.log(res);
+//})
 
 exports.zhcg_opt = zhcg_opt;

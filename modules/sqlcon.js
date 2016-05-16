@@ -207,17 +207,17 @@ var task_dispatch = function(p, callback){
 
                 if (err) {
 
-                    var request_body = "<ResultCode>1</ResultCode>"+
+                    var request_body = "<Request><ResultCode>1</ResultCode>"+
                         "<ResultDesc>internal errors</ResultDesc>"+
-                        "<ResultMemo>TaskDispatch</ResultMemo>";
+                        "<ResultMemo>TaskDispatch</ResultMemo></Request>";
 
                     callback (request_body,null);
 
                 }else {
 
-                    request_body = "<ResultCode>0</ResultCode>" +
+                    request_body = "<Request><ResultCode>0</ResultCode>" +
                         "<ResultDesc>成功保存信息</ResultDesc>" +
-                        "<ResultMemo>TaskDispatch</ResultMemo>";
+                        "<ResultMemo>TaskDispatch</ResultMemo></Request>";
 
 
                     callback(null, request_body);
