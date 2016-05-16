@@ -1,14 +1,8 @@
-var i = [{p:"{\"tsd\":1}", s:'2'},{p:'{'qq':343}', s:'666'}]
-
-
-//i.forEach(function(item){
-//
-//    console.log(JSON.parse(item['p']));
-//
-//
-//})
-
-var s = '{"ddd":2222}'
-
-
-console.log(typeof JSON.parse(s))
+var soap = require('soap');
+var url = 'http://101.200.174.136:8888/wsdltest/wsdl?wsdl';
+var args = {name: 'value'};
+soap.createClient(url, function(err, client) {
+    client.process(args, function(err, result) {
+        console.log(err);
+    });
+});

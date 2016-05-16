@@ -12,6 +12,10 @@ var soap_service = {
 
             process : function(args, callback){
 
+                console.log(args);
+
+               // args.request = args.request||''
+
                 var nr = args.request['$value'].replace(/\/\'/g,'\'');
 
                 parseString(nr, { explicitArray : false, mergeAttrs: true }, function (err, result) {
