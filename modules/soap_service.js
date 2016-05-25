@@ -7,39 +7,64 @@ var util = require('util');
 var settings = require('../settings');
 
 var soap_service = {
-    ws: {
-        zj_zhcg: {
+    EgovaService: {
+        EgovaServicePort: {
 
             process : function(args, callback) {
 
+                var request = args.request;
 
-                    var nr = args.request['$value'].replace(/\/\'/g, '\'');
+                console.log(request);
 
-                    parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
+                if(request.function.attributes.name=='TaskDispatch'){
+                    Task_dispatch(request.params, function (r) {
 
-                        if (err) throw err;
-                        var params = result['Request']['params'];
+                        callback(r);
+                    })
 
-                        if (result['Request']['function']['name'] == 'TaskDispatch') {
-                            // console.log(s);
+                }else if(request.function.attributes.name=='ReplyAccredit') {
 
-                            Task_dispatch(params, function (r) {
+                    ReplyAccredit(request.params, function (r) {
 
-                                callback(r);
-                            });
-
-
-                        } else if (result['Request']['function']['name'] == 'ReplyAccredit') {
-
-                            ReplyAccredit(params, function (r) {
-
-                                callback(r);
-                            });
-
-                        }
+                            callback(r);
+                        })
 
 
-                    });
+
+
+                }
+
+
+
+
+                    //var nr = args.request['$value'].replace(/\/\'/g, '\'');
+                    //
+                    //
+                    //parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
+                    //
+                    //    if (err) throw err;
+                    //    var params = result['Request']['params'];
+                    //
+                    //    if (result['Request']['function']['name'] == 'TaskDispatch') {
+                    //        // console.log(s);
+                    //
+                    //        Task_dispatch(params, function (r) {
+                    //
+                    //            callback(r);
+                    //        });
+                    //
+                    //
+                    //    } else if (result['Request']['function']['name'] == 'ReplyAccredit') {
+                    //
+                    //        ReplyAccredit(params, function (r) {
+                    //
+                    //            callback(r);
+                    //        });
+                    //
+                    //    }
+                    //
+                    //
+                    //});
 
 
             }
@@ -92,12 +117,15 @@ var Task_dispatch = function(p, callback){
 
 var ReplyAccredit = function(p, callback){
 
+    console.log('replyAccredit');
+
 
         var sql = "update BMSInspection.dbo.CG_ApplyAccredit set ReplyDate='%s', ReplyCode='%s', ReplyInfo='%s', ReplyMemo='%s' where " +
             "TaskNum='%s'";
 
         sql = util.format(sql, p.ReplayDate, p.ReplayCode, p.ReplayInfo, p.ReplayMemo, p.TaskNum);
         var status= (p.ReplyInfo==1)?1+ p.ReplayCode:2+ p.ReplayCode;
+
 
 
         sql_exec.status_update(p.TaskNum, status, sql, function(err, result){

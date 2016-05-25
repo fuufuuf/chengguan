@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<definitions name="wsdltest"-->
+             <!--targetNamespace="http://localhost:8004/wsdltest/"-->
+             <!--xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"-->
+             <!--xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"-->
+             <!--xmlns:xsd="http://www.w3.org/2001/XMLSchema"-->
+             <!--xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"-->
+             <!--xmlns="http://localhost:8004/wsdltest">-->
+
+    <definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns="http://schemas.xmlsoap.org/wsdl/"
+                 targetNamespace="http://localhost:8004/wsdltest/"
+                 name="wsdltest">
+    <message name="ProcessInput">
+        <part name="SPID" type="xsd:string"/>
+        <part name="SPPWD" type="xsd:string"/>
+		<part name="func" type="xsd:string"/>
+        <part name="request" type="xsd:string"/>
+    </message>
+	<message name="ProcessOutput">
+        <part name="result" type="xsd:string"/>
+    </message>
+
+
+    <portType name="zjcgp">
+
+		<operation name="process">
+            <input message="ProcessInput"/>
+            <output message="ProcessOutput"/>
+        </operation>
+
+    </portType>
+
+    <binding name="zjcgb" type="zjcgp">
+        <soap:binding style="rpc"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		<operation name="process">
+            <soap:operation soapAction="process"/>
+            <input>
+                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+    </binding>
+
+    <service name="ws">
+        <port name="zj_zhcg" binding="zjcgb">
+            <soap:address location="http://localhost:8004/wsdltest"/>
+        </port>
+    </service>
+</definitions>

@@ -1,49 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<definitions name="wsdltest"
-             targetNamespace="http://localhost:8004/wsdltest"
-             xmlns="http://localhost:8004/wsdltest"
-             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
-
-    <message name="ProcessInput">
+<definitions
+        targetNamespace="http://server.service.egova.com.cn/"
+        name="wsdltest" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="http://service.egova.com.cn/">
+    <message name="process">
         <part name="SPID" type="xsd:string"/>
         <part name="SPPWD" type="xsd:string"/>
-		<part name="func" type="xsd:string"/>
+        <part name="func" type="xsd:string"/>
         <part name="request" type="xsd:string"/>
     </message>
-	<message name="ProcessOutput">
+    <message name="processResponse">
         <part name="result" type="xsd:string"/>
     </message>
-
-
-    <portType name="zjcgp">
-
-		<operation name="process">
-            <input message="ProcessInput"/>
-            <output message="ProcessOutput"/>
+    <portType name="EgovaServiceSoap">
+        <operation name="process" parameterOrder="SPID SPPWD func request">
+            <input message="tns:process"/>
+            <output message="tns:processResponse"/>
         </operation>
-
     </portType>
-
-    <binding name="zjcgb" type="zjcgp">
-        <soap:binding style="rpc"
-                      transport="http://schemas.xmlsoap.org/soap/http"/>
-
-		<operation name="process">
-            <soap:operation soapAction="process"/>
+    <binding name="EgovaServicePortBinding" type="ns1:EgovaServiceSoap" xmlns:ns1="http://server.service.egova.com.cn/">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+        <operation name="process">
+            <soap:operation soapAction=""/>
             <input>
-                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                <soap:body use="literal" namespace="http://server.service.egova.com.cn/"/>
             </input>
             <output>
-                <soap:body use="literal" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                <soap:body use="literal" namespace="http://server.service.egova.com.cn/"/>
             </output>
         </operation>
-
     </binding>
-
-    <service name="ws">
-        <port name="zj_zhcg" binding="zjcgb">
+    <service name="EgovaService">
+        <port name="EgovaServicePort" binding="tns:EgovaServicePortBinding">
             <soap:address location="http://localhost:8004/wsdltest"/>
         </port>
     </service>
