@@ -2,7 +2,6 @@
 <definitions name="wsdltest"
              targetNamespace="http://localhost:8004/wsdltest"
              xmlns="http://localhost:8000/wsdltest"
-             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
              xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
