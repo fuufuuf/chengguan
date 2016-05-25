@@ -1,9 +1,11 @@
 <definitions
-        targetNamespace="http://server.service.egova.com.cn/"
-        name="wsdltest" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        targetNamespace="http://service.egova.com.cn/"
+        name="wsdltest"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:tns="http://service.egova.com.cn/">
+    <types/>
     <message name="process">
         <part name="SPID" type="xsd:string"/>
         <part name="SPPWD" type="xsd:string"/>
@@ -19,15 +21,15 @@
             <output message="tns:processResponse"/>
         </operation>
     </portType>
-    <binding name="EgovaServicePortBinding" type="ns1:EgovaServiceSoap" xmlns:ns1="http://server.service.egova.com.cn/">
+    <binding name="EgovaServicePortBinding" type="ns1:EgovaServiceSoap" xmlns:ns1="http://service.egova.com.cn/">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
         <operation name="process">
             <soap:operation soapAction=""/>
             <input>
-                <soap:body use="literal" namespace="http://server.service.egova.com.cn/"/>
+                <soap:body use="literal" namespace="http://service.egova.com.cn/"/>
             </input>
             <output>
-                <soap:body use="literal" namespace="http://server.service.egova.com.cn/"/>
+                <soap:body use="literal" namespace="http://service.egova.com.cn/"/>
             </output>
         </operation>
     </binding>
