@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="wsdltest"
              targetNamespace="http://localhost:8004/wsdltest"
-             xmlns="http://localhost:8000/wsdltest"
+             xmlns="http://localhost:8004/wsdltest"
              xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
