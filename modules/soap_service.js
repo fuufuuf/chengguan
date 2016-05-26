@@ -12,59 +12,69 @@ var soap_service = {
 
             process : function(args, callback) {
 
-                var request = args.request;
 
-                console.log(request);
+                //if(request.function.attributes.name=='TaskDispatch'){
+                //    Task_dispatch(request.params, function (r) {
+                //
+                //        callback(r);
+                //    })
+                //
+                //}else if(request.function.attributes.name=='ReplyAccredit') {
+                //
+                //    ReplyAccredit(request.params, function (r) {
+                //
+                //            callback(r);
+                //        })
+                //
+                //
+                //
+                //
+                //}
 
-                if(request.function.attributes.name=='TaskDispatch'){
-                    Task_dispatch(request.params, function (r) {
+                console.log('*********handle the process**************');
+                console.log(args);
 
-                        callback(r);
-                    })
-
-                }else if(request.function.attributes.name=='ReplyAccredit') {
-
-                    ReplyAccredit(request.params, function (r) {
-
-                            callback(r);
-                        })
+                if(args.request['$value']){
 
 
+                    var nr = args.request['$value'].replace(/\/\'/g, '\'');
 
+                    console.log(nr);
+
+
+                    parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
+
+                        if (err) throw err;
+                        var params = result['Request']['params'];
+
+                        if (result['Request']['function']['name'] == 'TaskDispatch') {
+                            // console.log(s);
+
+                            Task_dispatch(params, function (r) {
+
+                                callback(r);
+                            });
+
+
+                        } else if (result['Request']['function']['name'] == 'ReplyAccredit') {
+
+                            ReplyAccredit(params, function (r) {
+
+                                callback(r);
+                            });
+
+                        }
+
+
+                    });
+                }else{
+                    var request_body = "<Request><ResultCode>1</ResultCode>"+
+                        "<ResultDesc>err</ResultDesc>"+
+                        "<ResultMemo>internal error</ResultMemo></Request>";
+
+                    callback ({result:request_body});
 
                 }
-
-
-
-
-                    //var nr = args.request['$value'].replace(/\/\'/g, '\'');
-                    //
-                    //
-                    //parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
-                    //
-                    //    if (err) throw err;
-                    //    var params = result['Request']['params'];
-                    //
-                    //    if (result['Request']['function']['name'] == 'TaskDispatch') {
-                    //        // console.log(s);
-                    //
-                    //        Task_dispatch(params, function (r) {
-                    //
-                    //            callback(r);
-                    //        });
-                    //
-                    //
-                    //    } else if (result['Request']['function']['name'] == 'ReplyAccredit') {
-                    //
-                    //        ReplyAccredit(params, function (r) {
-                    //
-                    //            callback(r);
-                    //        });
-                    //
-                    //    }
-                    //
-                    //
-                    //});
 
 
             }
