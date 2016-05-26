@@ -14,7 +14,7 @@ var soap_service = {
 
                 var request = args.request;
 
-                console.log(request);
+                console.log(args);
 
                 if(request.function.attributes.name=='TaskDispatch'){
                     Task_dispatch(request.params, function (r) {
