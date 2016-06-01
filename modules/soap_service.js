@@ -18,7 +18,6 @@ var soap_service = {
                 console.log('*********handle the process**************');
                 if(args.request['$value']){
 
-
                     var nr = args.request['$value'].replace(/\/\'/g, '\'');
                     parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
 

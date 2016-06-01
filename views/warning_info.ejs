@@ -12,6 +12,42 @@ input {
 <body>
 <div id="el" class="easyui-layout" style="height:800px">
 
+    <div data-options="region:'north'" style="height:500px">
+        <p style="display:inline">选择桥梁</p>
+        <select class="easyui-combobox" name="state" id="bridge" style="height:25px; width:150px">
+            <option value="qingfeng">qingfeng</option>
+            <option value="changfeng">changfeng</option>
+            <option value="qinglinwan">qinglinwan</option>
+            <option value="waitan">waitan</option>
+            <option value="wantou">wantou</option>
+            <option value="mingzhou">mingzhou</option>
+            </select>
+
+
+        <table id="dg" title="选择预警信息" class="easyui-datagrid" style="height:500px"
+               url="get_warning?name=qingfeng" pagination="true"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="BridgeID">桥梁ID</th>
+                <th field="ObjectName">监测点名</th>
+                <th field="OverrangeValue">超限值</th>
+                <th field="OverrangeTime">超限时间</th>
+                <th field="RestoreTime">恢复时间</th>
+                <th field="OverrangeType">超限类型</th>
+                <th field="Unit">超限单位</th>
+                <th field="YellowAlertMinValue">黄色预警下限</th>
+                <th field="YellowAlertMaxValue">黄色预警上限</th>
+                <th field="RedAlertMinValue">红色预警下限</th>
+                <th field="RedAlertMaxValue">红色预警上限</th>
+                <th field="Comment">意见</th>
+
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+
     <div id="content" region="center" title="预警信息编辑">
         <form id="ff" method="post">
         <table>
@@ -22,18 +58,18 @@ input {
         </tr>
         <tr>
             <td>监测点名</td>
-            <td style="padding: 5px"><input class="easyui-validatebox" name="check_name" data-options="required:true" style="width:200px; height:20px"></td>
+            <td style="padding: 5px"><input id='ObjectName' class="easyui-validatebox" name="check_name" data-options="required:true" style="width:200px; height:20px"></td>
         </tr>
-        <tr>
-            <td>具体位置</td>
-            <td style="padding: 5px"><input class="easyui-validatebox" name="check_position" data-options="required:true" style="width:200px; height:20px"></td>
-        </tr>
+        <!--<tr>-->
+            <!--<td>具体位置</td>-->
+            <!--<td style="padding: 5px"><input class="easyui-validatebox" name="check_position" data-options="required:true" style="width:200px; height:20px"></td>-->
+        <!--</tr>-->
             <td>超限时间</td>
-            <td style="padding: 5px"><input class="easyui-datetimebox" name="over_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+            <td style="padding: 5px"><input id='OverrangeTime' class="easyui-datetimebox" name="over_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
         </tr>
         <tr>
             <td>超限值</td>
-            <td style="padding: 5px"><input class="easyui-validatebox" name="over_value" data-options="required:true" style="width:200px; height:20px"></td>
+            <td style="padding: 5px"><input id='OverrangeValue' class="easyui-validatebox" name="over_value" data-options="required:true" style="width:200px; height:20px"></td>
         </tr>
         <tr>
             <td>预警值</td>
@@ -43,16 +79,16 @@ input {
                     <option>红</option>
                     <option>黄</option>
                 </select>
-                下限<input class="easyui-validatebox" name="over_min" style="width:100px; height:20px">
-                单位<input class="easyui-validatebox" name="over_min_unit" style="width:50px; height:20px">
+                下限<input id='wmin' class="easyui-validatebox" name="over_min" style="width:100px; height:20px">
+                单位<input id='unit_1' class="easyui-validatebox" name="over_min_unit" style="width:50px; height:20px">
 
-                上限<input class="easyui-validatebox" name="over_max" style="width:100px; height:20px">
-                单位<input class="easyui-validatebox" name="over_max_unit" style="width:50px; height:20px">
+                上限<input id='wmax' class="easyui-validatebox" name="over_max" style="width:100px; height:20px">
+                单位<input id='unit_2' class="easyui-validatebox" name="over_max_unit" style="width:50px; height:20px">
             </td>
         </tr>
         <tr>
             <td>恢复时间</td>
-            <td style="padding: 5px"><input class="easyui-datetimebox" name="recover_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
+            <td style="padding: 5px"><input id='RestoreTime' class="easyui-datetimebox" name="recover_time" data-options="required:true,showSeconds:false" value="1/1/2016 2:3" style="width:200px"></td>
         </tr>
          <tr>
             <td>是否推送城管系统</td>
@@ -97,5 +133,34 @@ input {
         message: '不能为空值'
     }
 });
+
+
+    $('#bridge').combobox({
+        onChange: function(p1){
+            $('#dg').datagrid({
+                url:'get_warning?name='+p1
+            });
+            $('#dg').datagrid('reload');
+        },
+
+
+    });
+
+    $('#dg').datagrid({
+
+        onSelect: function(p1, p2){
+
+            console.log(p2.OverrangeValue);
+            $('#ObjectName').val(p2.ObjectName);//监测点
+            $('#OverrangeValue').val(p2.OverrangeValue);//超限值
+            $('#OverrangeTime').datetimebox('setValue', p2.OverrangeTime?p2.OverrangeTime.split('T')[0]+' '+p2.OverrangeTime.split('T')[1]:'');//超限时间
+            $('#RestoreTime').datetimebox('setValue', p2.RestoreTime?p2.RestoreTime.split('T')[0]+' '+p2.RestoreTime.split('T')[1]:'');//恢复时间
+
+
+
+        }
+
+    })
+
     </script>
 </html>

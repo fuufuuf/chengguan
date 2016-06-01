@@ -83,7 +83,7 @@ router.get('/new_layout', function(req, res, next){
 
 
 
-router.post('/comp', function(req, res, next) {
+router.post('/comp', function(req, res, next) { //not in use
 
     var dmg = req.query.id;
     var req = "http://115.29.33.204/InspectionService//ExamineService.svc/" +
@@ -137,6 +137,27 @@ router.post('/get_task', function(req, res, next) {
 
 
         var t = {total: rowCount, rows: row};
+        res.json(t);
+
+
+    });
+});
+
+router.post('/get_warning', function(req, res, next) {
+
+    var bridge = req.query.name;
+    var topNum = 30;
+
+
+    var sql = "SELECT TOP " + topNum + " [ID],[ObjectName],[OverrangeValue] ,[OverrangeTime],[RestoreValue],[RestoreTime]," +
+        "[OverrangeType],[Unit],[RedAlertMinValue],[YellowAlertMinValue],[YellowAlertMaxValue],[RedAlertMaxValue],[Comment]  " +
+        "FROM [" + bridge + "].[dbo].[COL_ForewarningInfo]  order by ID desc";
+
+    sql_exec.sqlexec(sql, function (err, rowCount, row) {
+
+
+        var t = {total: rowCount, rows: row};
+        console.log(t);
         res.json(t);
 
 
