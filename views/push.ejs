@@ -81,8 +81,8 @@
     success:function(data){
 
         var url = '/push'
-        data = $.parseJSON(data);
-        alert(data.status);
+        //data = $.parseJSON(data);
+        alert('推送成功');
         location.href = url;
 
     }
@@ -105,8 +105,8 @@
             $.messager.confirm('确认','是否确定删除这条推送?',function(r){
                 if (r){
                     $.post('remove_pushtask',{id:row.id},function(result){
-                        if (result.status){
-                            alert(result.status);
+                        if (result){
+                            alert(result);
                             $(dg).datagrid('reload');	// reload the user data
 
                         } else {
@@ -115,7 +115,7 @@
                                 msg: result.msg
                             });
                         }
-                    },'json');
+                    });
                 }
             });
         }

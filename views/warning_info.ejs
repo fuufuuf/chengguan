@@ -117,8 +117,9 @@ input {
                 return $(this).form('validate');
             },
             success: function (data) {
-                data = $.parseJSON(data);
-                alert(data.status);
+//                data = $.parseJSON(data);
+//                alert('ssss');
+                alert('编辑成功');
                 location.href = url;
 
             }
@@ -155,8 +156,11 @@ input {
             $('#OverrangeValue').val(p2.OverrangeValue);//超限值
             $('#OverrangeTime').datetimebox('setValue', p2.OverrangeTime?p2.OverrangeTime.split('T')[0]+' '+p2.OverrangeTime.split('T')[1]:'');//超限时间
             $('#RestoreTime').datetimebox('setValue', p2.RestoreTime?p2.RestoreTime.split('T')[0]+' '+p2.RestoreTime.split('T')[1]:'');//恢复时间
-
-
+            $('#yr').combobox('setValue',p2.OverrangeType?'红':'黄');//红黄预警
+            $('#wmin').val(p2.OverrangeType?p2.RedAlertMinValue:p2.YellowAlertMinValue);//下限值
+            $('#wmax').val(p2.OverrangeType?p2.RedAlertMaxValue:p2.YellowAlertMaxValue);//上限值
+            $('#unit_1').val(p2.Unit);//单位
+            $('#unit_2').val(p2.Unit);//单位
 
         }
 

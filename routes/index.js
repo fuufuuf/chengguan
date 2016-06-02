@@ -470,7 +470,7 @@ router.post('/editor', function(req, res, next) {
 
             var t = {total: rowCount, rows: row};
        
-            res.json({status : PUSH_STATUS_PASS});
+            res.end();
 
         });
 
@@ -536,7 +536,7 @@ router.post('/push', function(req, res, next) {
 //因为按照主键查询，数组只返回一项
          mobile_push.push(row.get_result_for_push[0], function(result){
 
-             res.json({status:'推送成功'});
+             res.end();
 
          })
      })
@@ -652,7 +652,7 @@ router.post('/taskeditor', function(req, res, next) {
         var t = {total: rowCount, rows: row};
         console.log(t);
 
-        res.json({status: PUSH_STATUS_PASS});
+        res.send({status: PUSH_STATUS_PASS});
 
     });
 
@@ -678,8 +678,10 @@ router.post('/warning_info', function(req, res, next) {
 
         var t = {total: rowCount, rows: row};
         console.log(t);
+        res.send();
 
-        res.json({status: PUSH_STATUS_PASS});
+        //res.json({status: PUSH_STATUS_PASS});
+
 
     });
 });
@@ -785,7 +787,7 @@ router.post('/remove_pushtask', function(req, res, next) {
 
         var t = {total: rowCount, rows: row};
 
-        res.json({status:'删除成功'});
+        res.send('删除成功');
 
     });
 
