@@ -1,0 +1,14 @@
+*********handle the process**************
+{ SPID: { attributes: { 'xsi:type': 'xsd:string' }, '$value': 'hsec' },
+  SPPWD: { attributes: { 'xsi:type': 'xsd:string' }, '$value': 'hsec' },
+  func:
+   { attributes: { 'xsi:type': 'xsd:string' },
+     '$value': 'TaskDispatch' },
+  request:
+   { attributes: { 'xsi:type': 'xsd:string' },
+     '$value': '<?xml version="1.0" encoding="UTF-8"?><Request><function name="TaskDispatch"/><params><TaskNum>16040700001</TaskNum><FindTime>2016-04-07 09:04:04</FindTime><EventSource>甬城管+</EventSource><EventType>1</EventType><MainType>3</MainType><SubType>18</SubType><DistrictCode>2</DistrictCode><DistrictName>江北区</DistrictName><StreetCode>108</StreetCode><StreetName>白沙街道</StreetName><CommunityCode>1249</CommunityCode><CommunityName>桃源社区</CommunityName><CoordinateX>360946.156</CoordinateX><CoordinateY>3309459.75</CoordinateY><EventAddress>[无位置描述]</EventAddress><EventDescription>ceshi </EventDescription><EventPositionMap>http://10.19.13.165:9088/MediaRoot/1159/18/Event11591857/PosMap.gif</EventPositionMap><SendTime>2016-04-07 09:04:20</SendTime><DealEndTime>2016-04-28 10:04:00</DealEndTime><SendMemo>江北区派遣员的意见：请专业部门根据情况，妥善处理该问题，并在处理后反馈指挥中心。</SendMemo><DealTimeLimit>360</DealTimeLimit><EventPictures num=\'0\'></EventPictures><EventMedias num=\'0\'></EventMedias><DealUnit>1736</DealUnit></params></Request>' } }
+*********handle the process**************
+1 rows
+**************************data ************************
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:tns="http://service.egova.com.cn/" xmlns:ns1="http://service.egova.com.cn/"><soap:Body><tns:processResponse><result>&lt;Request&gt;&lt;ResultCode&gt;0&lt;/ResultCode&gt;&lt;ResultDesc&gt;成功保存信息&lt;/ResultDesc&gt;&lt;ResultMemo&gt;TaskDispatch&lt;/ResultMemo&gt;&lt;/Request&gt;</result></tns:processResponse></soap:Body></soap:Envelope>
+***************************
