@@ -58,8 +58,7 @@ input {
                 return $(this).form('validate');
             },
             success: function (data) {
-                data = $.parseJSON(data);
-                alert(data.status);
+                alert('编辑成功');
                 var p = $('#el').layout('panel','center');  // get the panel
                 p.panel('refresh');  // refresh the panel content
 

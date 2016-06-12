@@ -53,7 +53,7 @@ input {
         <tbody>
         <tr>
             <td>桥梁名</td>
-            <td style="padding: 5px"><input class="easyui-validatebox" name="bridge_name" data-options="required:true, validType:'minLength[1]'" style="width:200px; height:20px"></td>
+            <td style="padding: 5px"><input class="easyui-validatebox" id='bg_name' name="bridge_name" data-options="required:true, validType:'minLength[1]'" style="width:200px; height:20px"></td>
         </tr>
         <tr>
             <td>监测点名</td>
@@ -140,8 +140,10 @@ input {
             $('#dg').datagrid({
                 url:'get_warning?name='+p1
             });
+            $('#bg_name').val($('#bridge').combobox('getText'));//桥梁名
             $('#dg').datagrid('reload');
-        },
+
+        }
 
 
     });
@@ -149,8 +151,8 @@ input {
     $('#dg').datagrid({
 
         onSelect: function(p1, p2){
-
-            console.log(p2.OverrangeValue);
+            $('#bg_name').val($('#bridge').combobox('getText'));//桥梁名
+            //console.log($('#bridge').combobox('getText'));
             $('#ObjectName').val(p2.ObjectName);//监测点
             $('#OverrangeValue').val(p2.OverrangeValue);//超限值
             $('#OverrangeTime').datetimebox('setValue', p2.OverrangeTime?p2.OverrangeTime.split('T')[0]+' '+p2.OverrangeTime.split('T')[1]:'');//超限时间

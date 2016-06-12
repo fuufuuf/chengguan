@@ -652,7 +652,7 @@ router.post('/taskeditor', function(req, res, next) {
         var t = {total: rowCount, rows: row};
         console.log(t);
 
-        res.send({status: PUSH_STATUS_PASS});
+        res.end('编辑成功');
 
     });
 
