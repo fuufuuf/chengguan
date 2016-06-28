@@ -26,9 +26,9 @@
             </tr>
             <tr>
                 <td>案件来源</td>
-                <td><%=details.FindTime%></td>
-                <td>案件类型</td>
                 <td><%=details.EventSource%></td>
+                <td>案件类型</td>
+                <td><%=details.EventType%></td>
             </tr>
             <tr>
                 <td>案件大类</td>
@@ -72,12 +72,12 @@
             </tbody>
         </table>
 <div id="toolbar">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" onclick="javascipt:location.href='/'">回退</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" onclick="javascipt:location.href='/task_done'">回退</a>
 </div>
 
         <h2>案件处理</h2>
         <form id="ff" method="post" enctype="multipart/form-data">
-        <p>处理人 <input class="easyui-textbox" name="person" style="width:300px; padding:5px"></p>
+        <p>处理人 <input class="easyui-textbox" name="person" style="width:300px; padding:5px" value="<%=details.DealUnit%>"></p>
         <p>处理详情</p> <textarea cols="80" rows="10" name='details' style="padding:5px"></textarea>
         <table id="dg" class="easyui-datagrid" data-options="nowrap:false,singleSelect:true" style="width:1000px; padding:5px">
             <thead>
