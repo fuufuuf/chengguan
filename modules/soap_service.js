@@ -114,6 +114,9 @@ var ReplyAccredit = function(p, callback){
         var status= (p.ReplyInfo==1)?1+ p.ReplayCode:2+ p.ReplayCode;
 
 
+    console.log(sql);
+
+
 
         sql_exec.status_update(p.TaskNum, status, sql, function(err, result){
 

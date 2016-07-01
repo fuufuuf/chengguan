@@ -131,7 +131,8 @@ router.get('/task_gzyq', function(req, res, next) {
 router.post('/get_task', function(req, res, next) {
 
 
-    sql = 'select TaskNum, MainType, DistrictName, EventAddress, SendTime, DealEndTime from BMSInspection.dbo.CG_taskdispatch where Status='+req.query.status;
+    sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
+        'a.MainType=b.MAINTYPEID';
 
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
 
@@ -332,7 +333,7 @@ router.get('/task_details', function(req, res, next) {
 
     var task_id = req.query.id;
     var web_source = req.query.source;
-    console.log(web_source);
+   // console.log(task_id);
 
 
     sql_exec.sql_task_detail(task_id, function(data){

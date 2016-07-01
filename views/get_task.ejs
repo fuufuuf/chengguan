@@ -12,7 +12,7 @@
     <thead>
     <tr>
         <th field="TaskNum">任务编号</th>
-        <th field="MainType">任务类型</th>
+        <th field="MAINTYPENAME">任务类型</th>
         <th field="DistrictName">事件发生区</th>
         <th field="EventAddress">事件发生地址</th>
         <th field="SendTime">发现时间</th>
@@ -210,7 +210,9 @@
                 $('#AD_Hour').hide();
             }
 
+            $('#cgID').attr("value",row.DealUnit);
             $('#TaskNum_Auto').attr("value",row.TaskNum);
+
             $('#ApplyDate_Auto').attr("value",new Date().Format("yyyy-MM-dd hh:mm:ss"))
             $('#dlg2').dialog('open').dialog('ApplyAccredit','申请');
 
@@ -225,6 +227,7 @@
         if (row){
             $('#TaskNum_Auto_Rollback').attr("value",row.TaskNum);
             $('#RollbackDate_Auto').attr("value",new Date().Format("yyyy-MM-dd hh:mm:ss"));
+            $('#cgID').attr("value",row.DealUnit);
             $('#dlg3').dialog('open');
 
         }

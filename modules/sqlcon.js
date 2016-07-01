@@ -110,7 +110,10 @@ var sql_task_detail = function(taskNum, callback){
     async.series({
         task: function(callback){
 
-            var sql = util.format("SELECT * FROM BMSInspection.dbo.CG_taskdispatch where BMSInspection.dbo.CG_taskdispatch.TaskNum='%s'",taskNum);
+            var sql = util.format("SELECT * FROM BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b, BMSInspection.dbo.CG_ZHCGSUBTYPE c" +
+                " where a.TaskNum='%s' and a.MainType=b.MAINTYPEID and a.SubType=c.SUBTYPEID",taskNum);
+
+            console.log(sql);
 
             sqlexec(sql, function(err, rowCount, row){
 
