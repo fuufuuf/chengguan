@@ -113,10 +113,7 @@ var ReplyAccredit = function(p, callback){
         sql = util.format(sql, p.ReplayDate, p.ReplayCode, p.ReplayInfo, p.ReplayMemo, p.TaskNum);
         var status= (p.ReplyInfo==1)?1+ p.ReplayCode:2+ p.ReplayCode;
 
-
     console.log(sql);
-
-
 
         sql_exec.status_update(p.TaskNum, status, sql, function(err, result){
 

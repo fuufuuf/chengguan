@@ -13,7 +13,10 @@ var zhcg_opt = function(func, opt, callback) {//this is used to send request to 
         if (err) throw err;
 
         client.process({SPID:settings.zhcg_user,SPPWD:settings.zhcg_passwd,func:func,request:opt},function(err,res){
-        if (err) throw err;
+        if (err) {
+
+            callback()
+        }
         callback(res);
     });
     })

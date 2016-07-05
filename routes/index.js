@@ -132,7 +132,7 @@ router.post('/get_task', function(req, res, next) {
 
 
     sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
-        'a.MainType=b.MAINTYPEID';
+        'a.MainType=b.MAINTYPEID order by TaskNum desc';
 
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
 
@@ -1148,10 +1148,11 @@ router.post('/DamagePicUpload', function(req, res, next) {
         for (item in files) {
 
             if (files[item].name != '') {
-                new_path = path.join(form.uploadDir, files[item].name);
+               // new_path = path.join(form.uploadDir, files[item].name);
+                new_path = path.join(fields.StorePath, files[item].name);
+                //fs.renameSync(files[item].path, new_path);
                 fs.renameSync(files[item].path, new_path);
                 name = files[item].name;
-                console.log(fields);
             }
 
         }
