@@ -3,6 +3,7 @@ var soap = require('soap');
 var settings = require('../settings');
 var path = require('path');
 var fs = require('fs');
+var parseString = require('xml2js').parseString;
 
 
 var zhcg_opt = function(func, opt, callback) {//this is used to send request to zhcg, that includes taskfeedback, delay('ApplyAccredit') and rollback
@@ -10,15 +11,28 @@ var zhcg_opt = function(func, opt, callback) {//this is used to send request to 
 
     soap.createClient(settings.zhcg_webservice_url, function(err, client) {
 
-        if (err) throw err;
+        if (err){
 
-        client.process({SPID:settings.zhcg_user,SPPWD:settings.zhcg_passwd,func:func,request:opt},function(err,res){
-        if (err) {
+            callback(err);
 
-            callback()
-        }
-        callback(res);
+        }else{
+
+        client.process({SPID:settings.zhcg_user,SPPWD:settings.zhcg_passwd,func:func,request:opt},function(err,ret) {
+            if (err) {
+
+                console.log(err);
+                callback(err);
+            } else {
+
+                parseString(ret['result'], {explicitArray: false, mergeAttrs: true}, function (err, result) {
+
+                    callback(null, result['Result'])
+                })
+
+            }
+
     });
+        }
     })
 }
 

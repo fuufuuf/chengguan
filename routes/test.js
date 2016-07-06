@@ -1,25 +1,9 @@
+var parseString = require('xml2js').parseString;
+
+var s = '<?xml version="1.0" encoding="UTF-8" ?><Result><ResultCode>-4</ResultCode><ResultDesc>å¤„ç†å¤–éƒ¨ç³»ç»Ÿç”³è¯·æˆæƒæ¥å£å¤±è´¥ï¼</ResultDesc><ResultMemo></ResultMemo></Result>';
+parseString(s, {explicitArray: false, mergeAttrs: true}, function (err, result) {
 
 
+    console.log(result);
 
-Date.prototype.Format = function(fmt)
-{ //author: meizz
-    var o = {
-        "M+" : this.getMonth()+1,                 //ÔÂ·İ
-        "d+" : this.getDate(),                    //ÈÕ
-        "h+" : this.getHours(),                   //Ğ¡Ê±
-        "m+" : this.getMinutes(),                 //·Ö
-        "s+" : this.getSeconds(),                 //Ãë
-        "q+" : Math.floor((this.getMonth()+3)/3), //¼¾¶È
-        "S"  : this.getMilliseconds()             //ºÁÃë
-    };
-    if(/(y+)/.test(fmt))
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-    for(var k in o)
-        if(new RegExp("("+ k +")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-    return fmt;
-}
-
-var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-
-console.log(date);
+})

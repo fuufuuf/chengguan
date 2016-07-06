@@ -110,12 +110,15 @@ var sql_task_detail = function(taskNum, callback){
     async.series({
         task: function(callback){
 
-            var sql = util.format("SELECT * FROM BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b, BMSInspection.dbo.CG_ZHCGSUBTYPE c" +
-                " where a.TaskNum='%s' and a.MainType=b.MAINTYPEID and a.SubType=c.SUBTYPEID",taskNum);
+            var sql = util.format("SELECT * FROM BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b, BMSInspection.dbo.CG_ZHCGSUBTYPE c, BMSInspection.dbo.CG_ZHCGEVENTTYPE d" +
+                " where a.TaskNum='%s' and a.MainType=b.MAINTYPEID and a.SubType=c.SUBTYPEID and a.EventType=d.EVENTTYPEID",taskNum);
 
             console.log(sql);
 
             sqlexec(sql, function(err, rowCount, row){
+
+                row[0].EventPositionMap = 'http://www.96310.gov.cn:8080/Media.ashx?URL='+row[0].EventPositionMap.split('MediaRoot')[1].substring(1);
+
 
                 callback(null, row);
             });
@@ -128,9 +131,14 @@ var sql_task_detail = function(taskNum, callback){
 
             sql = util.format(sql, taskNum);
 
-            console.log(sql);
+           // console.log(sql);
 
             sqlexec(sql, function(err, rowCount, row){
+
+                row.forEach(function(item){
+                    item.LocalURL='http://www.96310.gov.cn:8080/Media.ashx?URL='+item.LocalURL.split('MediaRoot')[1].substring(1);
+
+                })
 
                 callback(null, row);
             });
@@ -313,7 +321,14 @@ var status_update = function(taskNum,status, sql, callback){
             });
         }
     },function(err, results) {
-        callback(null, results);
+
+        if(err){
+
+            callback(err);
+
+        }else {
+            callback(null, results)
+        };
     });
 };
 

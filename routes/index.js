@@ -131,7 +131,8 @@ router.get('/task_gzyq', function(req, res, next) {
 router.post('/get_task', function(req, res, next) {
 
 
-    sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
+    sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from ' +
+        'BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
         'a.MainType=b.MAINTYPEID order by TaskNum desc';
 
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
@@ -221,7 +222,10 @@ router.post('/accredit', function(req, res, next){
 
 
 router.post('/ApplyAccredit', function(req, res, next) {
-/*申请延期挂账，type=1申请延期，2申请挂账(暂时不支持)， 操作的表为CG_ApplyAccredit*/
+
+
+    console.log('sssss');
+/*申请延期挂账，type=1申请延期，2申请挂账， 操作的表为CG_ApplyAccredit*/
 
 /*type, tasknum, unitID从query获取，其他从body获取*/
     if (req.query.type=='1'){
@@ -230,33 +234,67 @@ router.post('/ApplyAccredit', function(req, res, next) {
             "('%s', '%s', '%s', '%s', '%s', '%s')";
         sql=util.format(sql, req.query.TaskNum, req.body.cgID, '1', parseFloat(req.body.ApplyDelayInfo).toFixed(2), req.body.ApplyDate, req.body.ApplyMemo);
 
-    }else{
+        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/td.xml'), 'utf-8');//延期挂账
+
+        xml_req = util.format(xml_req, req.query.TaskNum, req.body.cgID, parseFloat(req.body.ApplyDelayInfo).toFixed(2), req.body.ApplyDate, req.body.ApplyMemo);
+
+
+
+    }else{//申请挂账
+
+        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/hang.xml'), 'utf-8');//延期挂账
+
+        xml_req = util.format(xml_req, req.query.TaskNum, req.body.cgID, req.body.ApplyDate, req.body.ApplyMemo);
+
 
         var sql = "insert into BMSInspection.dbo.CG_ApplyAccredit(TaskNum, ApplyOpter, ApplyFlag, ApplyDate, ApplyMemo) values"+
             "('%s', '%s', '%s', '%s', '%s')";
         sql = util.format(sql, req.query.TaskNum, req.body.cgID, '2', req.body.ApplyDate, req.body.ApplyMemo);
 
+    }
+
+    console.log(xml_req);
+
+
+    zhcg.zhcg_opt('ApplyAccredit', xml_req, function(err, ret){//task delay
+
+
+    if(err){
+
+        res.send('智慧城管服务器错误:'+err);
+    }else {
+
+        //console.log(ret);
+
+        if (ret.ResultCode != '0') {
+
+            res.send('操作失败:' + ret.ResultDesc);
+
+
+        } else {
+
+            /*更新task表状态信息 01 申请延期，02申请挂账
+             * 插入表CG_ApplyAccredit作为新的延期挂账申请*/
+            sql_exec.status_update(req.query.TaskNum, '0' + req.query.type, sql, function (err) {
+                if(err){
+
+                    res.send('本地数据库错误');
+
+                }else{
+
+                    res.send('操作成功');
+                }
+
+
+
+            })
+        }
+
 
     }
 
-    console.log(sql);
-    /*更新task表状态信息 01 申请延期，02申请挂账
-    * 插入表CG_ApplyAccredit作为新的延期挂账申请*/
-    sql_exec.status_update(req.query.TaskNum, '0'+req.query.type, sql, function(err){
 
-        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/td.xml'), 'utf-8');//task rollback
-
-        xml_req = util.format(xml_req, req.query.TaskNum, req.body.cgID, parseFloat(req.body.ApplyDelayInfo).toFixed(2), req.body.ApplyDate, req.body.ApplyMemo);
-
-        console.log(xml_req);
-
-        zhcg.zhcg_opt('ApplyAccredit', xml_req, function(result){//task delay
-            console.log(result);
-            if(err) res.end('err');
-            res.end('延期申请成功！');
-        })
-
-        if(err) res.end('err');
+       // if(err) res.end('err');
 /*
 * not in use
 * */
@@ -277,7 +315,7 @@ router.post('/ApplyAccredit', function(req, res, next) {
         //    res.end('操作成功！');
         //
         //})
-        res.end('操作成功！');
+       // res.end('操作成功！');
 
     });
 
@@ -291,17 +329,42 @@ router.post('/task_Rollback', function(req, res, next){
     var status = '03';
     var sql = "insert into BMSInspection.dbo.CG_TaskRollBack(TaskNum, RollbackOpter, RollbackDate, RollbackMemo) values('%s','%s','%s','%s')"
     sql = util.format(sql, req.body.taskNum, req.body.RollbackOpter, req.body.RollbackDate, req.body.RollbackMemo);
-   // console.log(sql);
-    sql_exec.status_update(req.body.taskNum, status, sql, function(err, result){
-        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tr.xml'), 'utf-8');//task rollback
-        xml_req = util.format(xml_req, req.body.taskNum, req.body.RollbackOpter, new Date().Format('yyyy-MM-dd hh:mm:ss'), req.body.RollbackMemo);
-        console.log(xml_req);
-        zhcg.zhcg_opt('TaskRollBack', xml_req, function(result){//task rollback
-            console.log(result);
-            if(err) res.end(err);
-            res.end('回退成功');
-        })
+
+    var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tr.xml'), 'utf-8');//task rollback
+    xml_req = util.format(xml_req, req.body.taskNum, req.body.RollbackOpter, new Date().Format('yyyy-MM-dd hh:mm:ss'), req.body.RollbackMemo);
+    zhcg.zhcg_opt('TaskRollBack', xml_req, function(err, ret){//task rollback
+        if(err) {
+            res.send('智慧城管服务器错误:'+err);
+        }else{
+
+            if (ret.ResultCode != '0') {
+
+                res.send('操作失败:' + ret.ResultDesc);
+
+
+            }else {
+
+                sql_exec.status_update(req.body.taskNum, status, sql, function (err, result) {
+
+                    if(err){
+
+                        res.send('本地数据库错误');
+
+                    }else {
+
+                        res.send('操作成功');
+                    }
+
+                })
+            }
+
+
+        }
+
     })
+
+
+
 
 
 });
@@ -338,9 +401,11 @@ router.get('/task_details', function(req, res, next) {
 
     sql_exec.sql_task_detail(task_id, function(data){
 
-
-
-        console.log(data['task_img']);
+        //data['task_img'].forEach(function(item){
+        //    item.LocalURL='http://www.96310.gov.cn:8080/Media.ashx?URL='+item.LocalURL.split('MediaRoot')[1].substring(1);
+        //
+        //})
+        //data['task'][0].EventPositionMap = 'http://www.96310.gov.cn:8080/Media.ashx?URL='+data['task'][0].EventPositionMap.split('MediaRoot')[1].substring(1);
 //media is not in use on task_detail.ejs
         res.render('task_detail', {details:data['task'][0], img: data['task_img'], media:data['task_media'], web_source:web_source||'/get_task'});
 
@@ -585,44 +650,51 @@ router.post('/reply_task', function(req, res, next) {
 
         }
 
-        //修改status=04,
+        var pic_info='';
+        var pf = "<picture name='%s' url='http://%s'/>";
+
+        if(file_size!=0){
+            for(name in loc){
+                pic_info += util.format(pf, name, settings.service_host+ ':' +settings.service_port +'/cg_imgs/'+name);
+            }
+
+        }
         var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-        var sql = "insert into BMSInspection.dbo.CG_TaskFeedBack(TaskNum, FeedbackDate, FeedbackMemo, FeedbackOpter, FeedbackPic) values('%s','%s','%s','%s','%s')";
-        sql = util.format(sql, fields.task_num,  date, fields.details, fields.person, JSON.stringify(loc));
 
-       sql_exec.status_update(fields.task_num, '04', sql, function(err){
+        var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tf.xml'), 'utf-8');//taskdispatch
+        var xml_req = util.format(xml_req, fields.task_num, date, fields.details, fields.person,file_size,pic_info);
 
+        console.log(xml_req);
 
-           var pic_info='';
-           var pf = "<picture name='%s' url='http://%s'/>";
-
-
-           if(err) throw err;
-           var xml_req = fs.readFileSync(path.join(__dirname,'../modules/tf.xml'), 'utf-8');//taskdispatch
-
-           if(file_size!=0){
-               for(name in loc){
-                   pic_info += util.format(pf, name, settings.service_host+ ':' +settings.service_port +'/cg_imgs/'+name);
-               }
-
-           }
+        zhcg.zhcg_opt('TaskFeedBack', xml_req, function(err, ret){//send to zhcg web service
 
 
-           var req_xml = util.format(xml_req, fields.task_num, date, fields.details, fields.person,file_size,pic_info);
-           zhcg.zhcg_opt('TaskFeedBack', req_xml, function(results){//send to zhcg web service
+            if(err) {
+                res.send('智慧城管服务器错误:'+err);
+            }else{
 
-               console.log(results);
-               res.end('操作成功');
+                if (ret.ResultCode != '0') {
 
-           })
-
-
+                    res.send('操作失败:' + ret.ResultDesc);
 
 
+                }else {
 
-       });
+                    //修改status=04,
+                    var sql = "insert into BMSInspection.dbo.CG_TaskFeedBack(TaskNum, FeedbackDate, FeedbackMemo, FeedbackOpter, FeedbackPic) values('%s','%s','%s','%s','%s')";
+                    sql = util.format(sql, fields.task_num,  date, fields.details, fields.person, JSON.stringify(loc));
+
+                    sql_exec.status_update(fields.task_num, '04', sql, function(err){
+
+                    });
 
 
+                }
+
+
+            }
+
+        })
 
     });
 

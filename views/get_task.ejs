@@ -37,7 +37,7 @@
     <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="showDetail('#dg')">详细信息</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="reply_task('#dg')">办理案件</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="ApplyAccredit(1)">申请延期</a>
-    <!--<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="ApplyAccredit(2)">申请挂账</a>-->
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="ApplyAccredit(2)">申请挂账</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="task_Rollback()">案件回退</a>
 </div>
 
@@ -80,7 +80,7 @@
         </div>
         <div class="fitem" id="AD_Hour">
             <label>延时期限(小时)</label>
-            <input name="ApplyDelayInfo" class="easyui-validatebox" data-options="required:true">
+            <input name="ApplyDelayInfo" class="easyui-validatebox" data-options="required:true" value="0">
         </div>
         <div class="fitem">
             <label>申请理由</label>
@@ -104,7 +104,7 @@
         </div>
         <div class="fitem">
             <label>智慧城管ID</label>
-            <input name="RollbackOpter" id="cgID" class="easyui-validatebox" data-options="required:true">
+            <input name="RollbackOpter" id="cgID1" class="easyui-validatebox" data-options="required:true">
         </div>
         <div class="fitem">
             <label>回退时间</label>
@@ -140,7 +140,7 @@
         })
     }
 
-        function rollback_task_submit() {
+    function rollback_task_submit() {
 
         $('#fm3').form('submit', {
             url:'/task_Rollback',
@@ -210,7 +210,7 @@
                 $('#AD_Hour').hide();
             }
 
-            $('#cgID').attr("value",row.DealUnit);
+            $('#cgID').attr("value",'0310004');//row.DealUnit
             $('#TaskNum_Auto').attr("value",row.TaskNum);
 
             $('#ApplyDate_Auto').attr("value",new Date().Format("yyyy-MM-dd hh:mm:ss"))
@@ -227,7 +227,7 @@
         if (row){
             $('#TaskNum_Auto_Rollback').attr("value",row.TaskNum);
             $('#RollbackDate_Auto').attr("value",new Date().Format("yyyy-MM-dd hh:mm:ss"));
-            $('#cgID').attr("value",row.DealUnit);
+            $('#cgID1').attr("value",'0310004');//
             $('#dlg3').dialog('open');
 
         }

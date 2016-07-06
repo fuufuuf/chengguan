@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Request >
+    <function name='ApplyAccredit'/>
+    <params>
+        <TaskNum>%s</TaskNum>
+        <ApplayOpter>%s</ApplayOpter>
+        <ApplyFlag>2</ApplyFlag>
+        <ApplyDelayInfo></ApplyDelayInfo>
+        <ApplyDate>%s</ApplyDate>
+        <ApplyMemo>%s</ApplyMemo>
+    </params>
+</Request>

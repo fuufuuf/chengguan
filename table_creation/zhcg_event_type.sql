@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  ÎÄ¼þÒÑ´´½¨ - ÐÇÆÚ¶þ-ÁùÔÂ-28-2016   
+--  æ–‡ä»¶å·²åˆ›å»º - æ˜ŸæœŸäºŒ-å…­æœˆ-28-2016   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table FI_ZHCGEVENTTYPE
@@ -15,3 +15,6 @@
    	"EVENTTYPENAME" VARCHAR(200),
    	"UNIQUECODE" VARCHAR(200)
       )
+
+      Insert into "BMSInspection"."dbo"."CG_ZHCGEVENTTYPE" (EVENTTYPEID,EVENTTYPECODE,EVENTTYPENAME,UNIQUECODE) values (1,'1','äº‹ä»¶','1');
+      Insert into "BMSInspection"."dbo"."CG_ZHCGEVENTTYPE" (EVENTTYPEID,EVENTTYPECODE,EVENTTYPENAME,UNIQUECODE) values (2,'2','éƒ¨ä»¶','2');
