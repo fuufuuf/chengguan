@@ -1221,7 +1221,9 @@ router.post('/DamagePicUpload', function(req, res, next) {
 
             if (files[item].name != '') {
                // new_path = path.join(form.uploadDir, files[item].name);
-                new_path = path.join(fields.StorePath, files[item].name);
+
+                new_path =fields.StorePath.substring(1,fields.StorePath.length-1)+'\\\\'+files[item].name;
+                console.log(new_path);
                 //fs.renameSync(files[item].path, new_path);
                 fs.renameSync(files[item].path, new_path);
                 name = files[item].name;
