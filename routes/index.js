@@ -560,8 +560,8 @@ router.post('/get_push', function(req, res, next) {
 
         //已推送的信息
 
-        sql = 'select a.*,b.GroupDefineName from BMSInspection.dbo.CG_push a, BMSInspection.dbo.Bridge_GroupDefine b where status='+req.query.status+
-            ' and a.push_group=b.GroupDefineID order by id desc';
+        sql = 'select a.*,b.GroupDefineName from BMSInspection.dbo.CG_push a, BMSInspection.dbo.Bridge_GroupDefine b where a.status='+req.query.status+
+            ' and a.push_group=CONVERT(varchar(36),b.GroupDefineID,36) order by id desc';
 
     }
 
