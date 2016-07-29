@@ -40,8 +40,16 @@ var soap_service = {
                                 callback(r);
                             });
 
-                        }
+                        }else if(result['Request']['function']['name'] == 'StateDispatch'){
 
+                            StateDispatch(params, function(r){
+
+
+                                callback(r);
+                            })
+
+
+                        }
 
                     });
                 }else{
@@ -140,4 +148,49 @@ var ReplyAccredit = function(p, callback){
 
         })
 
+};
+
+
+var StateDispatch = function(p, callback){
+
+    var sql = "select * from BMSInspection.dbo.CG_inState where TaskNum='%s'";
+    var sql_insert = "insert into BMSInspection.dbo.CG_inState(TaskNum,OperateDate,OperateID, ActDefName) values('%s', '%s', '%s', '%s')";
+    var sql_update = "update BMSInspection.dbo.CG_inState set OperateDate='%s', OperateID='%s', ActDefName='%s' where TaskNum='%s'";
+
+    sql = util.format(sql, p.TaskNum);
+    sql_insert = util.format(sql_insert, p.TaskNum, p.OperateDate, p.OperateID, p.ActDefName);
+    sql_update = util.format(sql_update, p.OperateDate, p.OperateID, p.ActDefName, p.TaskNum);
+
+    var request_body_err = "<Request><ResultCode>1</ResultCode>"+
+        "<ResultDesc>err</ResultDesc>"+
+        "<ResultMemo>StateDispatch</ResultMemo></Request>";
+
+    var request_body = "<Request><ResultCode>0</ResultCode>"+
+        "<ResultDesc>saved successed</ResultDesc>"+
+        "<ResultMemo>StateDispatch</ResultMemo></Request>";
+
+    console.log(sql, sql_insert, sql_update);
+
+
+
+    sql_exec.sqlexec(sql, function(err, rowCount, row){
+
+        if(rowCount==0){
+
+            sql_exec.sqlexec(sql_insert, function(err, rowCount, row){
+
+                callback ({result:request_body});
+            })
+
+        }else{
+
+            sql_exec.sqlexec(sql_update, function (err, rowCount, row) {
+
+                callback ({result:request_body});
+
+            })
+
+        }
+
+    })
 };
