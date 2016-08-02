@@ -130,15 +130,50 @@ router.get('/task_gzyq', function(req, res, next) {
 
 router.post('/get_task', function(req, res, next) {
 
+    console.log(req.body);
 
-    sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from ' +
-        'BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
-        'a.MainType=b.MAINTYPEID order by TaskNum desc';
+    var start = (req.body.page-1)*10+1;
+    var end = start+parseInt(req.body.rows)-1;
+
+    //
+    //var sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from ' +
+    //    'BMSInspection.dbo.CG_taskdispatch a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status='+req.query.status+' AND ' +
+    //    'a.MainType=b.MAINTYPEID order by TaskNum desc';
+
+    var sql = 'select * from (select row_number() over (order by a.TaskNum desc) as rn,a.TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit, OperateID, ActDefName' +
+        ' from BMSInspection.dbo.task_dispatch_view1 a, BMSInspection.dbo.CG_ZHCGMAINTYPE b where Status=%s AND a.MainType=b.MAINTYPEID) c where rn between %s and %s;'
+
+    sql = util.format(sql, req.query.status, start, end);
+
+    console.log(sql);
 
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
 
+        row.forEach(function(item){
 
-        var t = {total: rowCount, rows: row};
+            switch (item.OperateID){
+
+                case '610':
+                    item.OperateID = '转批';
+                    break;
+                case '626':
+                    item.OperateID = '回退';
+                    break;
+                case '606':
+                    item.OperateID = '延期';
+                    break;
+                case '810':
+                    item.OperateID = '挂账';
+                    break;
+                default:
+                    item.OperateID = '初始状态';
+                    break;
+            }
+
+        })
+
+
+        var t = {total: 200, rows: row};
         res.json(t);
 
 

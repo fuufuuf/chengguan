@@ -26,11 +26,20 @@ var soap_service = {
 
                         if (result['Request']['function']['name'] == 'TaskDispatch') {
                             // console.log(s);
+                            if(params.DealUnit!=settings.unitID){//throw unitID not eq required
+
+                                var request_body = "<Request><ResultCode>0</ResultCode>" +
+                                    "<ResultDesc>成功保存</ResultDesc>" +
+                                    "<ResultMemo>信息不属于市政部</ResultMemo></Request>";
+
+                                callback ({result:request_body});
+                            }else{
 
                             Task_dispatch(params, function (r) {
 
                                 callback(r);
                             });
+                            }
 
 
                         } else if (result['Request']['function']['name'] == 'ReplyAccredit') {

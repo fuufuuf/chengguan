@@ -1,0 +1,286 @@
+
+
+
+{
+  "op" : "query",
+  "ns" : "yushan.yushan_user",
+  "query" : {
+    "find" : "yushan_user",
+    "filter" : {
+      "all_info.app_id" : "04681ac0c1c04d0398bd8c5ee2e4703e",
+      "all_info.sem_kwid" : "42653993545",
+      "all_info.sdate" : {
+        "$gte" : ISODate("2016-07-31T00:00:00Z"),
+        "$lt" : ISODate("2016-08-01T00:00:00Z")
+      }
+    }
+  },
+  "cursorid" : 72214734700,
+  "keysExamined" : 312927,
+  "docsExamined" : 246213,
+  "keyUpdates" : 0,
+  "writeConflicts" : 0,
+  "numYield" : 8118,
+  "locks" : {
+    "Global" : {
+      "acquireCount" : {
+        "r" : NumberLong(16238)
+      }
+    },
+    "Database" : {
+      "acquireCount" : {
+        "r" : NumberLong(8119)
+      }
+    },
+    "Collection" : {
+      "acquireCount" : {
+        "r" : NumberLong(8119)
+      }
+    }
+  },
+  "nreturned" : 101,
+  "responseLength" : 82787,
+  "millis" : 117769,
+  "execStats" : {
+    "stage" : "MULTI_PLAN",
+    "nReturned" : 101,
+    "executionTimeMillisEstimate" : 116980,
+    "works" : 0,
+    "advanced" : 101,
+    "needTime" : 0,
+    "needYield" : 0,
+    "saveState" : 8119,
+    "restoreState" : 8118,
+    "isEOF" : 0,
+    "invalidates" : 0,
+    "inputStages" : [
+      {
+        "stage" : "FETCH",
+        "filter" : {
+          "$and" : [
+            {
+              "all_info.sem_kwid" : {
+                "$eq" : "42653993545"
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$lt" : ISODate("2016-08-01T00:00:00Z")
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$gte" : ISODate("2016-07-31T00:00:00Z")
+              }
+            }
+          ]
+        },
+        "nReturned" : 101,
+        "executionTimeMillisEstimate" : 49313,
+        "works" : 312927,
+        "advanced" : 101,
+        "needTime" : 312826,
+        "needYield" : 0,
+        "saveState" : 8119,
+        "restoreState" : 8118,
+        "isEOF" : 0,
+        "invalidates" : 0,
+        "docsExamined" : 246213,
+        "alreadyHasObj" : 0,
+        "inputStage" : {
+          "stage" : "IXSCAN",
+          "nReturned" : 246213,
+          "executionTimeMillisEstimate" : 850,
+          "works" : 312927,
+          "advanced" : 246213,
+          "needTime" : 66714,
+          "needYield" : 0,
+          "saveState" : 8119,
+          "restoreState" : 8118,
+          "isEOF" : 0,
+          "invalidates" : 0,
+          "keyPattern" : {
+            "all_info.app_id" : 1,
+            "all_info.sip" : 1,
+            "all_info.sdate" : 1
+          },
+          "indexName" : "all_info.app_id_1_all_info.sip_1_all_info.sdate_1",
+          "isMultiKey" : true,
+          "isUnique" : false,
+          "isSparse" : false,
+          "isPartial" : false,
+          "indexVersion" : 1,
+          "direction" : "forward",
+          "indexBounds" : {
+            "all_info.app_id" : [
+              "[\"04681ac0c1c04d0398bd8c5ee2e4703e\", \"04681ac0c1c04d0398bd8c5ee2e4703e\"]"
+            ],
+            "all_info.sip" : [
+              "[MinKey, MaxKey]"
+            ],
+            "all_info.sdate" : [
+              "[MinKey, MaxKey]"
+            ]
+          },
+          "keysExamined" : 312927,
+          "dupsTested" : 312927,
+          "dupsDropped" : 66714,
+          "seenInvalidated" : 0
+        }
+      },
+      {
+        "stage" : "FETCH",
+        "filter" : {
+          "$and" : [
+            {
+              "all_info.sem_kwid" : {
+                "$eq" : "42653993545"
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$lt" : ISODate("2016-08-01T00:00:00Z")
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$gte" : ISODate("2016-07-31T00:00:00Z")
+              }
+            }
+          ]
+        },
+        "nReturned" : 22,
+        "executionTimeMillisEstimate" : 13477,
+        "works" : 312927,
+        "advanced" : 22,
+        "needTime" : 312905,
+        "needYield" : 0,
+        "saveState" : 8119,
+        "restoreState" : 8118,
+        "isEOF" : 0,
+        "invalidates" : 0,
+        "docsExamined" : 204730,
+        "alreadyHasObj" : 0,
+        "inputStage" : {
+          "stage" : "IXSCAN",
+          "nReturned" : 204730,
+          "executionTimeMillisEstimate" : 1150,
+          "works" : 312927,
+          "advanced" : 204730,
+          "needTime" : 108197,
+          "needYield" : 0,
+          "saveState" : 8119,
+          "restoreState" : 8118,
+          "isEOF" : 0,
+          "invalidates" : 0,
+          "keyPattern" : {
+            "all_info.app_id" : 1,
+            "all_info.c3" : 1,
+            "all_info.sdate" : 1
+          },
+          "indexName" : "all_info.app_id_1_all_info.c3_1_all_info.sdate_1",
+          "isMultiKey" : true,
+          "isUnique" : false,
+          "isSparse" : false,
+          "isPartial" : false,
+          "indexVersion" : 1,
+          "direction" : "forward",
+          "indexBounds" : {
+            "all_info.app_id" : [
+              "[\"04681ac0c1c04d0398bd8c5ee2e4703e\", \"04681ac0c1c04d0398bd8c5ee2e4703e\"]"
+            ],
+            "all_info.c3" : [
+              "[MinKey, MaxKey]"
+            ],
+            "all_info.sdate" : [
+              "[MinKey, MaxKey]"
+            ]
+          },
+          "keysExamined" : 312927,
+          "dupsTested" : 312927,
+          "dupsDropped" : 108197,
+          "seenInvalidated" : 0
+        }
+      },
+      {
+        "stage" : "FETCH",
+        "filter" : {
+          "$and" : [
+            {
+              "all_info.sem_kwid" : {
+                "$eq" : "42653993545"
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$lt" : ISODate("2016-08-01T00:00:00Z")
+              }
+            },
+            {
+              "all_info.sdate" : {
+                "$gte" : ISODate("2016-07-31T00:00:00Z")
+              }
+            }
+          ]
+        },
+        "nReturned" : 29,
+        "executionTimeMillisEstimate" : 53270,
+        "works" : 312927,
+        "advanced" : 29,
+        "needTime" : 312898,
+        "needYield" : 0,
+        "saveState" : 8119,
+        "restoreState" : 8118,
+        "isEOF" : 0,
+        "invalidates" : 0,
+        "docsExamined" : 311584,
+        "alreadyHasObj" : 0,
+        "inputStage" : {
+          "stage" : "IXSCAN",
+          "nReturned" : 311584,
+          "executionTimeMillisEstimate" : 850,
+          "works" : 312927,
+          "advanced" : 311584,
+          "needTime" : 1343,
+          "needYield" : 0,
+          "saveState" : 8119,
+          "restoreState" : 8118,
+          "isEOF" : 0,
+          "invalidates" : 0,
+          "keyPattern" : {
+            "all_info.app_id" : 1,
+            "all_info.c3" : 1
+          },
+          "indexName" : "all_info.app_id_1_all_info.c3_1",
+          "isMultiKey" : true,
+          "isUnique" : false,
+          "isSparse" : false,
+          "isPartial" : false,
+          "indexVersion" : 1,
+          "direction" : "forward",
+          "indexBounds" : {
+            "all_info.app_id" : [
+              "[\"04681ac0c1c04d0398bd8c5ee2e4703e\", \"04681ac0c1c04d0398bd8c5ee2e4703e\"]"
+            ],
+            "all_info.c3" : [
+              "[MinKey, MaxKey]"
+            ]
+          },
+          "keysExamined" : 312927,
+          "dupsTested" : 312927,
+          "dupsDropped" : 1343,
+          "seenInvalidated" : 0
+        }
+      }
+    ]
+  },
+  "ts" : ISODate("2016-08-01T06:50:54.566Z"),
+  "client" : "10.173.18.195",
+  "allUsers" : [
+    {
+      "user" : "root",
+      "db" : "admin"
+    }
+  ],
+  "user" : "root@admin"
+}
