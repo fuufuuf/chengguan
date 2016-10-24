@@ -16,6 +16,7 @@ var soap_service = {
                 console.log('*********handle the process**************');
                 console.log(args);
                 console.log('*********handle the process**************');
+
                 if(args.request['$value']){
 
                     var nr = args.request['$value'].replace(/\/\'/g, '\'');
@@ -25,12 +26,18 @@ var soap_service = {
                         var params = result['Request']['params'];
 
                         if (result['Request']['function']['name'] == 'TaskDispatch') {
-                            // console.log(s);
+                            console.log('*******params******');
+                            console.log(params);
+                            console.log('*******settings UnitID******');
+                            console.log(settings.unitID);
+                            console.log('*************');
+
                             if(params.DealUnit!=settings.unitID){//throw unitID not eq required
 
                                 var request_body = "<Request><ResultCode>0</ResultCode>" +
                                     "<ResultDesc>成功保存</ResultDesc>" +
                                     "<ResultMemo>信息不属于市政部</ResultMemo></Request>";
+                                console.log(request_body);
 
                                 callback ({result:request_body});
                             }else{
@@ -61,6 +68,16 @@ var soap_service = {
                         }
 
                     });
+                }else if(args){//workaround, for soapui only
+
+                    if(args.func=='TaskDispatch'){
+                        Task_dispatch(args.request.params, function (r) {
+
+                            callback(r);
+                        });
+
+                    }
+
                 }else{
                     var request_body = "<Request><ResultCode>1</ResultCode>"+
                         "<ResultDesc>err</ResultDesc>"+
