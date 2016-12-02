@@ -10,7 +10,7 @@
         <part name="SPID" type="xsd:string"/>
         <part name="SPPWD" type="xsd:string"/>
         <part name="func" type="xsd:string"/>
-        <part name="request" type="xsd:string"/>
+        <part name="Request" type="xsd:string"/>
     </message>
     <message name="processResponse">
         <part name="result" type="xsd:string"/>

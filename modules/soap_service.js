@@ -17,9 +17,9 @@ var soap_service = {
                 console.log(args);
                 console.log('*********handle the process**************');
 
-                if(args.request['$value']){
+                if(args.Request['$value']){
 
-                    var nr = args.request['$value'].replace(/\/\'/g, '\'');
+                    var nr = args.Request['$value'].replace(/\/\'/g, '\'');
                     parseString(nr, {explicitArray: false, mergeAttrs: true}, function (err, result) {
 
                         if (err) throw err;
@@ -71,7 +71,7 @@ var soap_service = {
                 }else if(args){//workaround, for soapui only
 
                     if(args.func=='TaskDispatch'){
-                        Task_dispatch(args.request.params, function (r) {
+                        Task_dispatch(args.Request.params, function (r) {
 
                             callback(r);
                         });
