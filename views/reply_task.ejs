@@ -4,7 +4,7 @@
 </head>
 
 <body>
-<div id="cc" class="easyui-layout" style="height:500px; padding: 20px">
+<div id="cc" class="easyui-layout" style="height:500px; width:1450px; padding: 20px">
     <div data-options="region:'center',title:'处理案件'" style="padding:5px;left:10px;">
         <h2>案件信息</h2>
 
@@ -120,7 +120,7 @@
     }
 
     function task_submit() {
-        var url = '/';
+        var url = '/get_task';
 	$('#ff').form('submit', {
             url: 'reply_task',
             onSubmit: function (param) {
