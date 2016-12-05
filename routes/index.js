@@ -134,6 +134,7 @@ router.post('/get_task', function(req, res, next) {
 
     var start = (req.body.page-1)*10+1;
     var end = start+parseInt(req.body.rows)-1;
+    var row_length;
 
     //
     //var sql = 'select TaskNum, MAINTYPENAME, DistrictName, EventAddress, SendTime, DealEndTime, DealUnit from ' +
@@ -145,9 +146,9 @@ router.post('/get_task', function(req, res, next) {
 
     sql = util.format(sql, req.query.status, start, end);
 
-    console.log(sql);
-
     sql_exec.sqlexec(sql, function (err, rowCount, row) {
+
+        row_length = rowCount;
 
         row.forEach(function(item){
 
@@ -173,7 +174,7 @@ router.post('/get_task', function(req, res, next) {
         })
 
 
-        var t = {total: 200, rows: row};
+        var t = {total: row_length, rows: row};
         res.json(t);
 
 
